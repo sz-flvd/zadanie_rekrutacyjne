@@ -30,5 +30,9 @@ Message* message_create(const Message_type type, char const data[const]) {
 }
 
 void message_destroy(Message const* msg) {
+    if(msg == NULL) {
+        return NULL;
+    }
+    
     free(msg);
 }

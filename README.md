@@ -1,1 +1,2 @@
-# Repozytorium poświęcone zadaniu rekrutacyjnemu do firmy Tieroevry.
+# CPU Tracker
+Zadanie rekrutacyjne do firmy Tietoevry.
