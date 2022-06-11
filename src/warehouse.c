@@ -9,11 +9,6 @@ struct Warehouse {
     pthread_cond_t consumption_allowed;
 };
 
-struct Warehouse_pair {
-    Warehouse* w1;
-    Warehouse* w2;
-};
-
 Warehouse* warehouse_create(void) {
     Warehouse* w = malloc(sizeof(*w));
 
@@ -81,25 +76,4 @@ void warehouse_producer_notify(Warehouse* w) {
 
 void warehouse_consumer_notify(Warehouse* w) {
     
-}
-
-Warehouse_pair* warehouse_pair_create(Warehouse* w1, Warehouse* w2) {
-    Warehouse_pair* wp = malloc(sizeof(*wp));
-
-    if(wp == NULL) {
-        return NULL;
-    }
-
-    wp->w1 = w1;
-    wp->w2 = w2;
-
-    return wp;
-}
-
-void Warehouse_pair_destroy(Warehouse_pair* wp) {
-    if(wp == NULL) {
-        return NULL;
-    }
-
-    free(wp);
 }
