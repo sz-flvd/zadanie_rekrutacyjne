@@ -7,7 +7,7 @@ struct Message {
     char payload[];
 };
 
-Message* message_create(const Message_type type, char const data[const]) {
+Message* message_create(Message_type const type, char const data[const]) {
     if(data == NULL) {
         return NULL;
     }
@@ -29,7 +29,7 @@ Message* message_create(const Message_type type, char const data[const]) {
     return message;
 }
 
-void message_destroy(Message const* msg) {
+void message_destroy(Message* const msg) {
     if(msg == NULL) {
         return NULL;
     }

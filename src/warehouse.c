@@ -24,7 +24,7 @@ struct Warehouse {
     pthread_cond_t watchdog_log_allowed;
 };
 
-Warehouse* warehouse_create(void) {
+Warehouse* warehouse_create() {
     Warehouse* w = malloc(sizeof(*w));
 
     if(w == NULL) {
@@ -51,7 +51,7 @@ Warehouse* warehouse_create(void) {
     return w;
 }
 
-void warehouse_destroy(Warehouse* w) {
+void warehouse_destroy(Warehouse* const w) {
     if(w == NULL) {
         return NULL;
     }
@@ -73,101 +73,101 @@ void warehouse_destroy(Warehouse* w) {
     free(w);
 }
 
-bool warehouse_analyzer_is_full(Warehouse const* w) {
+bool warehouse_analyzer_is_full(Warehouse const* const w) {
     return queue_is_full(w->analyzer_queue);
 }
 
-bool warehouse_analyzer_is_empty(Warehouse const* w) {
+bool warehouse_analyzer_is_empty(Warehouse const* const w) {
     return queue_is_empty(w->analyzer_queue);
 }
 
-bool warehouse_printer_is_full(Warehouse const* w) {
+bool warehouse_printer_is_full(Warehouse const* const w) {
     return queue_is_full(w->printer_queue);
 }
 
-bool warehouse_printer_is_empty(Warehouse const* w) {
+bool warehouse_printer_is_empty(Warehouse const* const w) {
     return queue_is_empty(w->printer_queue);
 }
 
-bool warehouse_logger_is_full(Warehouse const* w) {
+bool warehouse_logger_is_full(Warehouse const* const w) {
     return queue_is_full(w->logger_queue);
 }
 
-bool warehouse_logger_is_empty(Warehouse const* w) {
+bool warehouse_logger_is_empty(Warehouse const* const w) {
     return queue_is_empty(w->logger_queue);
 }
 
-void warehouse_analyzer_lock(Warehouse* w) {
+void warehouse_analyzer_lock(Warehouse* const w) {
     
 }
 
-void warehouse_analyzer_unlock(Warehouse* w) {
+void warehouse_analyzer_unlock(Warehouse* const w) {
 
 }
 
-void warehouse_printer_lock(Warehouse* w) {
+void warehouse_printer_lock(Warehouse* const w) {
 
 }
 
-void warehouse_printer_unlock(Warehouse* w) {
+void warehouse_printer_unlock(Warehouse* const w) {
 
 }
 
-void warehouse_logger_lock(Warehouse* w) {
+void warehouse_logger_lock(Warehouse* const w) {
 
 }
 
-void warehouse_logger_unlock(Warehouse* w) {
+void warehouse_logger_unlock(Warehouse* const w) {
 
 }
 
-void warehouse_reader_put(Warehouse* w) {
+void warehouse_reader_put(Warehouse* const w) {
 
 }
 
-void* warehouse_analyzer_get(Warehouse* w) {
+void* warehouse_analyzer_get(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_put(Warehouse* w) {
+void warehouse_analyzer_put(Warehouse* const w) {
 
 }
 
-void* warehouse_printer_get(Warehouse* w) {
+void* warehouse_printer_get(Warehouse* const w) {
 
 }
 
 /* add function which allows tasks to post to logger queue */
 
-void warehouse_reader_wait(Warehouse* w) {
+void warehouse_reader_wait(Warehouse* const w) {
 
 }
 
-void warehouse_reader_notify(Warehouse* w) {
+void warehouse_reader_notify(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_get_wait(Warehouse* w) {
+void warehouse_analyzer_get_wait(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_get_notify(Warehouse* w) {
+void warehouse_analyzer_get_notify(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_post_wait(Warehouse* w) {
+void warehouse_analyzer_post_wait(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_post_notify(Warehouse* w) {
+void warehouse_analyzer_post_notify(Warehouse* const w) {
 
 }
 
-void warehouse_printer_wait(Warehouse* w) {
+void warehouse_printer_wait(Warehouse* const w) {
 
 }
 
-void warehouse_printer_notify(Warehouse* w) {
+void warehouse_printer_notify(Warehouse* const w) {
     
 }
 

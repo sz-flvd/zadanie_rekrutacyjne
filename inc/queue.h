@@ -12,7 +12,7 @@ Queue* queue_create(size_t n_elem, size_t elem_size);
 void queue_destroy(Queue* q);
 bool queue_is_empty(Queue const* q);
 bool queue_is_full(Queue const* q);
-Queue_status queue_enqueue(Queue* const q, void* elem);
-void* queue_dequeue(Queue* const q);
+Queue_status queue_enqueue(Queue* restrict q, void const* restrict elem);
+Queue_status queue_dequeue(Queue* restrict q, void* restrict elem);
 
 #endif
