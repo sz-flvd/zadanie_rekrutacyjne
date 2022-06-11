@@ -8,11 +8,11 @@ typedef enum Queue_status {queue_ok = 0, queue_empty = 1, queue_full = 2, queue_
 
 typedef struct Queue Queue;
 
-Queue* queue_create(size_t max_size, size_t elem_size);
+Queue* queue_create(size_t n_elem, size_t elem_size);
 void queue_destroy(Queue* q);
 bool queue_is_empty(Queue const* q);
 bool queue_is_full(Queue const* q);
-Queue_status queue_enqueue(Queue* q, void* elem);
-void* queue_dequeue(Queue* q);
+Queue_status queue_enqueue(Queue* const q, void* elem);
+void* queue_dequeue(Queue* const q);
 
 #endif

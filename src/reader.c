@@ -3,6 +3,7 @@
 
 void* reader(void* arg) {
     while(true) {
-
+        
+        sleep(1000);
     }
 }
