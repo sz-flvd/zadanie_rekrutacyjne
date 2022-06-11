@@ -6,7 +6,6 @@
 #include "watchdog.h"
 #include "logger.h"
 
-
 int main(int argc, char* argv[]) {
     pthread_t rd, an, pr, wd, lg;
 

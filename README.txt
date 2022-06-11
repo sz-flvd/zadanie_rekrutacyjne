@@ -1,1 +1,1 @@
-Repozytorium poświęcone zadaniu rekrutacyjnemu do firmy TieroEvry.
+Repozytorium poświęcone zadaniu rekrutacyjnemu do firmy Tieroevry.

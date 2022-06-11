@@ -71,9 +71,9 @@ void warehouse_producer_wait(Warehouse* w) {
 
 }
 
-void warehouse_consumer_wait(Warehouse* w) [
-
-]
+void warehouse_consumer_wait(Warehouse* w) {
+    
+}
 
 void warehouse_producer_notify(Warehouse* w) {
 
