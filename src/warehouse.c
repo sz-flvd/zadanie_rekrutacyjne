@@ -13,7 +13,7 @@ struct Warehouse {
     pthread_mutex_t analyzer_mutex;
     pthread_mutex_t printer_mutex;
     pthread_mutex_t logger_mutex;
-    pthread_cond_t reader_post_allowed;
+    pthread_cond_t reader_put_allowed;
     pthread_cond_t analyzer_get_allowed;
     pthread_cond_t analyzer_put_allowed;
     pthread_cond_t printer_get_allowed;
@@ -38,7 +38,7 @@ Warehouse* warehouse_create() {
         .analyzer_mutex = PTHREAD_MUTEX_INITIALIZER,
         .printer_mutex = PTHREAD_MUTEX_INITIALIZER,
         .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
-        .reader_post_allowed = PTHREAD_COND_INITIALIZER,
+        .reader_put_allowed = PTHREAD_COND_INITIALIZER,
         .analyzer_get_allowed = PTHREAD_COND_INITIALIZER,
         .analyzer_put_allowed = PTHREAD_COND_INITIALIZER,
         .printer_get_allowed = PTHREAD_COND_INITIALIZER,
@@ -56,7 +56,7 @@ void warehouse_destroy(Warehouse* const w) {
         return NULL;
     }
 
-    pthread_cond_destroy(&w->reader_post_allowed);
+    pthread_cond_destroy(&w->reader_put_allowed);
     pthread_cond_destroy(&w->analyzer_get_allowed);
     pthread_cond_destroy(&w->analyzer_put_allowed);
     pthread_cond_destroy(&w->printer_get_allowed);
@@ -98,19 +98,19 @@ bool warehouse_logger_is_empty(Warehouse const* const w) {
 }
 
 void warehouse_analyzer_lock(Warehouse* const w) {
-    
+    pthread_mutex_lock(&w->analyzer_mutex);
 }
 
 void warehouse_analyzer_unlock(Warehouse* const w) {
-
+    pthread_mutex_unlock(&w->analyzer_mutex);
 }
 
 void warehouse_printer_lock(Warehouse* const w) {
-
+    pthread_mutex_lock(&w->printer_mutex);
 }
 
 void warehouse_printer_unlock(Warehouse* const w) {
-
+    pthread_mutex_unlock(&w->printer_mutex);
 }
 
 void warehouse_logger_lock(Warehouse* const w) {
@@ -122,53 +122,59 @@ void warehouse_logger_unlock(Warehouse* const w) {
 }
 
 void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
-
+    queue_enqueue(w->analyzer_queue, msg);
 }
 
-void* warehouse_analyzer_get(Warehouse* const w) {
+Message** warehouse_analyzer_get(Warehouse* const w) {
+    Message** const msg = malloc(sizeof(*msg));
 
+    if(queue_dequeue(w->analyzer_queue, msg) != queue_ok) {
+        return NULL;
+    }
+
+    return msg;
 }
 
 void warehouse_analyzer_put(Warehouse* const w, Processed_data const* const pd) {
-
+    queue_enqueue(w->printer_queue, pd);
 }
 
-void* warehouse_printer_get(Warehouse* const w) {
+Processed_data* warehouse_printer_get(Warehouse* const w) {
 
 }
 
 /* add function which allows tasks to post to logger queue */
 
 void warehouse_reader_wait(Warehouse* const w) {
-
+    pthread_cond_wait(&w->reader_put_allowed, &w->analyzer_mutex);
 }
 
 void warehouse_reader_notify(Warehouse* const w) {
-
+    pthread_cond_signal(&w->reader_put_allowed);
 }
 
 void warehouse_analyzer_get_wait(Warehouse* const w) {
-
+    pthread_cond_wait(&w->analyzer_get_allowed, &w->analyzer_mutex);
 }
 
 void warehouse_analyzer_get_notify(Warehouse* const w) {
-
+    pthread_cond_signal(&w->analyzer_get_allowed);
 }
 
 void warehouse_analyzer_put_wait(Warehouse* const w) {
-
+    pthread_cond_wait(&w->analyzer_put_allowed, &w->printer_mutex);
 }
 
 void warehouse_analyzer_put_notify(Warehouse* const w) {
-
+    pthread_cond_signal(&w->analyzer_put_allowed);
 }
 
 void warehouse_printer_wait(Warehouse* const w) {
-
+    pthread_cond_wait(&w->printer_get_allowed, &w->printer_mutex);
 }
 
 void warehouse_printer_notify(Warehouse* const w) {
-    
+    pthread_cond_signal(&w->printer_get_allowed);
 }
 
 /* add handling logger queue */

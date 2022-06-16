@@ -10,7 +10,7 @@
 void* reader(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
     FILE* file;
-    char* const buf;
+    char* buf;
     size_t buf_size;
 
     while(true) {
@@ -18,7 +18,7 @@ void* reader(void* arg) {
         file = fopen(FILE_NAME, FILE_FLAG);
         if(file == NULL) {
             /* Change to handling errors with opening /proc/stat */
-            printf("[READER] File %s could not be opened.\n", FILE_NAME);
+            printf("[READER] File %s could not be opened\n", FILE_NAME);
             continue;
         }
 
@@ -31,7 +31,7 @@ void* reader(void* arg) {
         buf_size = ftell(file);
         if(buf_size < 0) {
             /* Change to handling errors with seeking file end */
-            printf("[READER] Error occured while determining file stream position\n",);
+            printf("[READER] Error occured while determining file stream position\n");
             fclose(file);
             continue;
         }
@@ -67,19 +67,18 @@ void* reader(void* arg) {
             continue;
         }
 
+        printf("[READER] Entering critical section\n");
         warehouse_analyzer_lock(w);
         if(warehouse_analyzer_is_full(w)) {
-            printf("[READER] Analyzer queue full, waiting to put msg\n");
+            printf("[READER] Queue is full, waiting for analyzer to finish processing and get next item\n");
             warehouse_reader_wait(w);
         }
 
-        printf("[READER] Putting msg into analyzer queue\n");
+        printf("[READER] Putting message into analyzer queue\n");
         warehouse_analyzer_put(w, msg);
         warehouse_analyzer_get_notify(w);
         printf("[READER] Leaving critical section\n");
-        warehouse_analyzer_unlock();
-
-        message_destroy(msg);
+        warehouse_analyzer_unlock(w);
 
         /* Perhaps sleep a random number of seconds/milliseconds, like rand() * 200 ms or something */
         sleep(1000);
