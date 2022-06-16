@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
+#include "warehouse.h"
 #include "reader.h"
 #include "analyzer.h"
 #include "printer.h"
@@ -7,13 +8,14 @@
 #include "logger.h"
 
 int main(int argc, char* argv[]) {
+    Warehouse* w = warehouse_create();
     pthread_t rd, an, pr, wd, lg;
 
-    pthread_create(&rd, NULL, reader, NULL);
-    pthread_create(&an, NULL, analyzer, NULL);
-    pthread_create(&pr, NULL, printer, NULL);
-    pthread_create(&wd, NULL, watchdog, NULL);
-    pthread_create(&lg, NULL, logger, NULL);
+    pthread_create(&rd, NULL, reader, w);
+    pthread_create(&an, NULL, analyzer, w);
+    pthread_create(&pr, NULL, printer, w);
+    pthread_create(&wd, NULL, watchdog, w);
+    pthread_create(&lg, NULL, logger, w);
 
     pthread_join(rd, NULL);
     pthread_join(an, NULL);

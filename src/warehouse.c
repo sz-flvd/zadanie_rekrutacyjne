@@ -15,7 +15,7 @@ struct Warehouse {
     pthread_mutex_t logger_mutex;
     pthread_cond_t reader_post_allowed;
     pthread_cond_t analyzer_get_allowed;
-    pthread_cond_t analyzer_post_allowed;
+    pthread_cond_t analyzer_put_allowed;
     pthread_cond_t printer_get_allowed;
     /* might need to change to semaphore */
     pthread_cond_t reader_log_allowed;
@@ -40,7 +40,7 @@ Warehouse* warehouse_create() {
         .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
         .reader_post_allowed = PTHREAD_COND_INITIALIZER,
         .analyzer_get_allowed = PTHREAD_COND_INITIALIZER,
-        .analyzer_post_allowed = PTHREAD_COND_INITIALIZER,
+        .analyzer_put_allowed = PTHREAD_COND_INITIALIZER,
         .printer_get_allowed = PTHREAD_COND_INITIALIZER,
         .reader_log_allowed = PTHREAD_COND_INITIALIZER,
         .analyzer_log_allowed = PTHREAD_COND_INITIALIZER,
@@ -58,7 +58,7 @@ void warehouse_destroy(Warehouse* const w) {
 
     pthread_cond_destroy(&w->reader_post_allowed);
     pthread_cond_destroy(&w->analyzer_get_allowed);
-    pthread_cond_destroy(&w->analyzer_post_allowed);
+    pthread_cond_destroy(&w->analyzer_put_allowed);
     pthread_cond_destroy(&w->printer_get_allowed);
     pthread_cond_destroy(&w->reader_log_allowed);
     pthread_cond_destroy(&w->analyzer_log_allowed);
@@ -121,7 +121,7 @@ void warehouse_logger_unlock(Warehouse* const w) {
 
 }
 
-void warehouse_reader_put(Warehouse* const w) {
+void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
 
 }
 
@@ -129,7 +129,7 @@ void* warehouse_analyzer_get(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_put(Warehouse* const w) {
+void warehouse_analyzer_put(Warehouse* const w, Processed_data const* const pd) {
 
 }
 
@@ -155,11 +155,11 @@ void warehouse_analyzer_get_notify(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_post_wait(Warehouse* const w) {
+void warehouse_analyzer_put_wait(Warehouse* const w) {
 
 }
 
-void warehouse_analyzer_post_notify(Warehouse* const w) {
+void warehouse_analyzer_put_notify(Warehouse* const w) {
 
 }
 

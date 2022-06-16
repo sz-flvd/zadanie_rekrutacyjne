@@ -12,11 +12,9 @@ Message* message_create(Message_type const type, char const data[const]) {
         return NULL;
     }
 
-    Message* message;
-
     const size_t len = strlen(data) + 1;
 
-    message = malloc(sizeof(*message) + sizeof(*message->payload) * len);
+    Message* const message = malloc(sizeof(*message) + sizeof(*message->payload) * len);
 
     if(message == NULL) {
         return NULL;
