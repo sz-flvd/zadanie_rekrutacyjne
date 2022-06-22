@@ -41,3 +41,19 @@ int processed_data_set(Processed_data* const pd, size_t const offset, double con
 
     return 0;
 }
+
+size_t processed_data_get_n_elem(Processed_data const* const pd) {
+    if(pd == NULL) {
+        return 0;
+    }
+
+    return pd->n_elem;
+}
+
+double processed_data_get_elem_at(Processed_data const* const pd, size_t const offset) {
+    if(pd == NULL) {
+        return 0;
+    }
+
+    return pd->data[offset];
+}
