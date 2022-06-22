@@ -10,9 +10,10 @@
 #define FILE_FLAG "r"
 
 void* reader(void* arg) {
-    Warehouse* w = *(Warehouse**) arg;
+    Warehouse* const w = *(Warehouse**) arg;
     FILE* file;
     char* buf;
+    char c;
     size_t buf_size;
 
     while(true) {
@@ -24,29 +25,22 @@ void* reader(void* arg) {
             continue;
         }
 
-        /* change to
-            bufferSize = 0;
-            do {
-                c = fgetc(f);
-                ++bufferSize;
-            } while (c != EOF);
-            bufferSize -= 1;
-            rewind(f);
-        */
-        if(fseek(file, 0L, SEEK_END) != 0) {
-            /* Change to handling errors with seeking file end */
-            printf("[READER] Seeking file end in %s failed\n", FILE_NAME);
-            fclose(file);
-            continue;
-        }
-        buf_size = ftell(file);
-        if(buf_size < 0) {
+        buf_size = 0;
+        
+        do {
+            c = fgetc(file);
+            buf_size++;
+        } while (c != EOF);
+            
+        buf_size -= 1;
+        rewind(file);
+
+        if(buf_size == 0) {
             /* Change to handling errors with seeking file end */
             printf("[READER] Error occured while determining file stream position\n");
             fclose(file);
             continue;
         }
-        rewind(file);
 
         buf = calloc(1, buf_size + 1);
         if(buf == NULL) {
@@ -68,8 +62,8 @@ void* reader(void* arg) {
 
         Message* msg = message_create(raw_data, buf);
         /*
-            At this point working with buf is done and it can be free'd 
-            whether or not message_create was successful
+            At this point working with buf is done and it can be
+            free'd whether or not message_create was successful
         */
         free(buf);
         if(msg == NULL) {

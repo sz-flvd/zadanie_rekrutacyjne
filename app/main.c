@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <pthread.h>
 
-
 int main(int argc, char* argv[]) {
     Warehouse* w = warehouse_create();
+
     pthread_t rd, an, pr, wd, lg;
 
     pthread_create(&rd, NULL, reader, w);

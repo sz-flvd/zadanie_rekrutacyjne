@@ -62,7 +62,7 @@ Queue_status queue_enqueue(Queue* const restrict q, void const* const restrict e
         return queue_full;
     }
 
-    uint8_t*const ptr = &q->content[q->head * q->elem_size];
+    uint8_t* const ptr = &q->content[q->head * q->elem_size];
     memcpy(ptr, elem, q->elem_size);
 
     q->head++;
