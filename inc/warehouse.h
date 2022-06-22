@@ -27,7 +27,7 @@ void warehouse_logger_unlock(Warehouse* w);
 void warehouse_reader_put(Warehouse* w, Message const* m);
 Message** warehouse_analyzer_get(Warehouse* w);
 void warehouse_analyzer_put(Warehouse* w, Processed_data const* pd);
-Processed_data* warehouse_printer_get(Warehouse* w);
+Processed_data** warehouse_printer_get(Warehouse* w);
 /* add function which allows tasks to post to logger queue */
 
 void warehouse_reader_wait(Warehouse* w);

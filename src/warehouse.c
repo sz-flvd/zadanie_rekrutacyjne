@@ -75,59 +75,117 @@ void warehouse_destroy(Warehouse* const w) {
 }
 
 bool warehouse_analyzer_is_full(Warehouse const* const w) {
+    if(w == NULL) {
+        return false;
+    }
+
     return queue_is_full(w->analyzer_queue);
 }
 
 bool warehouse_analyzer_is_empty(Warehouse const* const w) {
+    if(w == NULL) {
+        return true;
+    }
+
     return queue_is_empty(w->analyzer_queue);
 }
 
 bool warehouse_printer_is_full(Warehouse const* const w) {
+    if(w == NULL) {
+        return false;
+    }
+
     return queue_is_full(w->printer_queue);
 }
 
 bool warehouse_printer_is_empty(Warehouse const* const w) {
+    if(w == NULL) {
+        return true;
+    }
+
     return queue_is_empty(w->printer_queue);
 }
 
 bool warehouse_logger_is_full(Warehouse const* const w) {
+    if(w == NULL) {
+        return false;
+    }
+
     return queue_is_full(w->logger_queue);
 }
 
 bool warehouse_logger_is_empty(Warehouse const* const w) {
+    if(w == NULL) {
+        return true;
+    }
+
     return queue_is_empty(w->logger_queue);
 }
 
 void warehouse_analyzer_lock(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+
     pthread_mutex_lock(&w->analyzer_mutex);
 }
 
 void warehouse_analyzer_unlock(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_mutex_unlock(&w->analyzer_mutex);
 }
 
 void warehouse_printer_lock(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_mutex_lock(&w->printer_mutex);
 }
 
 void warehouse_printer_unlock(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_mutex_unlock(&w->printer_mutex);
 }
 
 void warehouse_logger_lock(Warehouse* const w) {
-
+    if(w == NULL) {
+        return;
+    }
+    
 }
 
 void warehouse_logger_unlock(Warehouse* const w) {
-
+    if(w == NULL) {
+        return;
+    }
+    
 }
 
 void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
+    if(w == NULL || msg == NULL) {
+        return; 
+    }
+
     queue_enqueue(w->analyzer_queue, &msg);
 }
 
 Message** warehouse_analyzer_get(Warehouse* const w) {
+    if(w == NULL) {
+        return NULL;
+    }
+
     Message** const msg = malloc(sizeof(*msg));
+
+    if(msg == NULL) {
+        return NULL;
+    }
 
     if(queue_dequeue(w->analyzer_queue, msg) != queue_ok) {
         return NULL;
@@ -137,44 +195,94 @@ Message** warehouse_analyzer_get(Warehouse* const w) {
 }
 
 void warehouse_analyzer_put(Warehouse* const w, Processed_data const* const pd) {
+    if(w == NULL || pd == NULL) {
+        return;
+    }
+
     queue_enqueue(w->printer_queue, &pd);
 }
 
-Processed_data* warehouse_printer_get(Warehouse* const w) {
-    return NULL;
+Processed_data** warehouse_printer_get(Warehouse* const w) {
+    if(w == NULL) {
+        return NULL;
+    }
+
+    Processed_data** pd = malloc(sizeof(*pd));
+
+    if(pd == NULL) {
+        return NULL;
+    }
+
+    if(queue_dequeue(w->printer_queue, pd) != queue_ok) {
+        return NULL;
+    }
+
+    return pd;
 }
 
 /* add function which allows tasks to post to logger queue */
 
 void warehouse_reader_wait(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_wait(&w->reader_put_allowed, &w->analyzer_mutex);
 }
 
 void warehouse_reader_notify(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_signal(&w->reader_put_allowed);
 }
 
 void warehouse_analyzer_get_wait(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_wait(&w->analyzer_get_allowed, &w->analyzer_mutex);
 }
 
 void warehouse_analyzer_get_notify(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_signal(&w->analyzer_get_allowed);
 }
 
 void warehouse_analyzer_put_wait(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_wait(&w->analyzer_put_allowed, &w->printer_mutex);
 }
 
 void warehouse_analyzer_put_notify(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_signal(&w->analyzer_put_allowed);
 }
 
 void warehouse_printer_wait(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_wait(&w->printer_get_allowed, &w->printer_mutex);
 }
 
 void warehouse_printer_notify(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+    
     pthread_cond_signal(&w->printer_get_allowed);
 }
 

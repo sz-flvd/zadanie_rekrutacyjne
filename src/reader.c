@@ -85,7 +85,6 @@ void* reader(void* arg) {
         printf("[READER] Leaving critical section\n");
         warehouse_analyzer_unlock(w);
 
-        /* Perhaps sleep a random number of seconds/milliseconds, like rand() * 200 ms or something */
         sleep(1);
     }
 }

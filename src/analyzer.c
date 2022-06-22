@@ -33,7 +33,7 @@ void* analyzer(void* arg) {
         printf("[ANALYZER] Leaving first critical section\n");
         warehouse_analyzer_unlock(w);
 
-        /* Do some analysis, create object of Processed_data */
+        /* Parse msg and fill Raw_data objects with parsed values */
         message_destroy(*msg);
         free(msg);
 
@@ -55,7 +55,6 @@ void* analyzer(void* arg) {
         warehouse_printer_notify(w);
         printf("[ANALYZER] Leaving second critical section\n");
 
-        /* Perhaps sleep a random number of seconds/milliseconds, like rand() * 200 ms or something */
         sleep(1);
     }
 }
