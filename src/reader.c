@@ -1,8 +1,10 @@
+#include <warehouse.h>
+#include <message.h>
+#include <reader.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "warehouse.h"
-#include "message.h"
-#include "reader.h"
+#include <unistd.h>
 
 #define FILE_NAME "/proc/stat"
 #define FILE_FLAG "r"
@@ -22,6 +24,15 @@ void* reader(void* arg) {
             continue;
         }
 
+        /* change to
+            bufferSize = 0;
+            do {
+                c = fgetc(f);
+                ++bufferSize;
+            } while (c != EOF);
+            bufferSize -= 1;
+            rewind(f);
+        */
         if(fseek(file, 0L, SEEK_END) != 0) {
             /* Change to handling errors with seeking file end */
             printf("[READER] Seeking file end in %s failed\n", FILE_NAME);
@@ -75,12 +86,12 @@ void* reader(void* arg) {
         }
 
         printf("[READER] Putting message into analyzer queue\n");
-        warehouse_analyzer_put(w, msg);
+        warehouse_reader_put(w, msg);
         warehouse_analyzer_get_notify(w);
         printf("[READER] Leaving critical section\n");
         warehouse_analyzer_unlock(w);
 
         /* Perhaps sleep a random number of seconds/milliseconds, like rand() * 200 ms or something */
-        sleep(1000);
+        sleep(1);
     }
 }

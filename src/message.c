@@ -1,5 +1,7 @@
+#include <message.h>
+#include <stdlib.h>
 #include <stddef.h>
-#include "message.h"
+#include <string.h>
 
 struct Message {
     size_t payload_size;
@@ -29,7 +31,7 @@ Message* message_create(Message_type const type, char const data[const]) {
 
 void message_destroy(Message* const msg) {
     if(msg == NULL) {
-        return NULL;
+        return;
     }
     
     free(msg);

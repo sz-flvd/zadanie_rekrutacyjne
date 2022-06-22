@@ -1,8 +1,11 @@
+#include <warehouse.h>
+#include <analyzer.h>
+#include <message.h>
+#include <processed_data.h>
 #include <stdbool.h>
-#include "warehouse.h"
-#include "analyzer.h"
-#include "message.h"
-#include "processed_data.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 void* analyzer(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
@@ -38,6 +41,6 @@ void* analyzer(void* arg) {
         printf("[ANALYZER] Leaving second critical section\n");
 
         /* Perhaps sleep a random number of seconds/milliseconds, like rand() * 200 ms or something */
-        sleep(1000);
+        sleep(1);
     }
 }

@@ -1,11 +1,12 @@
+#include <warehouse.h>
+#include <reader.h>
+#include <analyzer.h>
+#include <printer.h>
+#include <watchdog.h>
+#include <logger.h>
 #include <stdio.h>
 #include <pthread.h>
-#include "warehouse.h"
-#include "reader.h"
-#include "analyzer.h"
-#include "printer.h"
-#include "watchdog.h"
-#include "logger.h"
+
 
 int main(int argc, char* argv[]) {
     Warehouse* w = warehouse_create();

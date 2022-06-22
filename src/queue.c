@@ -1,5 +1,7 @@
+#include <queue.h>
 #include <stdint.h>
-#include "queue.h"
+#include <stdlib.h>
+#include <string.h>
 
 struct Queue {
     size_t n_elem;      /* maximum number of elements held in queue */
@@ -23,11 +25,13 @@ Queue* queue_create(size_t const n_elem, size_t const elem_size) {
 
     q->n_elem = n_elem;
     q->elem_size = elem_size;
+
+    return q;
 }
 
 void queue_destroy(Queue* const q) {
     if(q == NULL) {
-        return NULL;
+        return;
     }
 
     free(q);

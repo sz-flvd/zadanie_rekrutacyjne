@@ -1,8 +1,9 @@
+#include <stdlib.h>
 #include <pthread.h>
-#include "warehouse.h"
-#include "queue.h"
-#include "processed_data.h"
-#include "message.h"
+#include <warehouse.h>
+#include <queue.h>
+#include <processed_data.h>
+#include <message.h>
 
 #define QUEUE_N_ELEMS 5
 
@@ -53,7 +54,7 @@ Warehouse* warehouse_create() {
 
 void warehouse_destroy(Warehouse* const w) {
     if(w == NULL) {
-        return NULL;
+        return;
     }
 
     pthread_cond_destroy(&w->reader_put_allowed);
@@ -67,9 +68,9 @@ void warehouse_destroy(Warehouse* const w) {
     pthread_mutex_destroy(&w->analyzer_mutex);
     pthread_mutex_destroy(&w->printer_mutex);
     pthread_mutex_destroy(&w->logger_mutex);
-    queue_destroy(&w->analyzer_queue);
-    queue_destroy(&w->printer_queue);
-    queue_destroy(&w->logger_queue);
+    queue_destroy(w->analyzer_queue);
+    queue_destroy(w->printer_queue);
+    queue_destroy(w->logger_queue);
     free(w);
 }
 
@@ -122,7 +123,7 @@ void warehouse_logger_unlock(Warehouse* const w) {
 }
 
 void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
-    queue_enqueue(w->analyzer_queue, msg);
+    queue_enqueue(w->analyzer_queue, &msg);
 }
 
 Message** warehouse_analyzer_get(Warehouse* const w) {
@@ -136,11 +137,11 @@ Message** warehouse_analyzer_get(Warehouse* const w) {
 }
 
 void warehouse_analyzer_put(Warehouse* const w, Processed_data const* const pd) {
-    queue_enqueue(w->printer_queue, pd);
+    queue_enqueue(w->printer_queue, &pd);
 }
 
 Processed_data* warehouse_printer_get(Warehouse* const w) {
-
+    return NULL;
 }
 
 /* add function which allows tasks to post to logger queue */

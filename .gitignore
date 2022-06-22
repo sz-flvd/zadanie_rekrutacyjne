@@ -1,2 +1,5 @@
 /.vscode
 /tieto_zadanie_rekrutacyjne.pdf
+*.d
+*.o
+*.out
