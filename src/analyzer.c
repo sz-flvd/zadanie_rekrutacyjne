@@ -3,15 +3,18 @@
 #include <message.h>
 #include <raw_data.h>
 #include <processed_data.h>
+#include <thread_sleep.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/sysinfo.h>
 
 void* analyzer(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
-    int n_procs = get_nprocs();
+    srandom(time(NULL));
+    size_t n_procs = (size_t) get_nprocs();
     Raw_data* prev_rd[n_procs];
     Raw_data* curr_rd[n_procs];
     
@@ -34,6 +37,7 @@ void* analyzer(void* arg) {
         warehouse_analyzer_unlock(w);
 
         /* Parse msg and fill Raw_data objects with parsed values */
+
         message_destroy(*msg);
         free(msg);
 
@@ -54,7 +58,10 @@ void* analyzer(void* arg) {
         warehouse_analyzer_put(w, pd);
         warehouse_printer_notify(w);
         printf("[ANALYZER] Leaving second critical section\n");
+        warehouse_printer_unlock(w);
 
-        sleep(1);
+        long const rand_sleep = ((random() % 6) + 5) * 100;
+        printf("[ANALYZER] Sleeping for %ld millis\n", rand_sleep);
+        thread_sleep_millis(rand_sleep);
     }
 }

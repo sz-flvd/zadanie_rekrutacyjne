@@ -1,5 +1,6 @@
 #include <message.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stddef.h>
 #include <string.h>
 
@@ -35,4 +36,12 @@ void message_destroy(Message* const msg) {
     }
     
     free(msg);
+}
+
+void message_print(Message const* const msg) {
+    if(msg == NULL) {
+        return;
+    }
+
+    printf("%s\n", msg->payload);
 }

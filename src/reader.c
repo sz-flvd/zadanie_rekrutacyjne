@@ -1,16 +1,19 @@
 #include <warehouse.h>
 #include <message.h>
 #include <reader.h>
+#include <thread_sleep.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <time.h>
 
 #define FILE_NAME "/proc/stat"
 #define FILE_FLAG "r"
 
 void* reader(void* arg) {
     Warehouse* const w = *(Warehouse**) arg;
+    srandom(time(NULL));
     FILE* file;
     char* buf;
     char c;
@@ -85,6 +88,8 @@ void* reader(void* arg) {
         printf("[READER] Leaving critical section\n");
         warehouse_analyzer_unlock(w);
 
-        sleep(1);
+        long const rand_sleep = ((random() % 6) + 5) * 100;
+        printf("[READER] Sleeping for %ld millis\n", rand_sleep);
+        thread_sleep_millis(rand_sleep);
     }
 }

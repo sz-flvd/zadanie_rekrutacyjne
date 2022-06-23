@@ -1,6 +1,7 @@
 #include <queue.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 struct Queue {
@@ -42,7 +43,7 @@ bool queue_is_empty(Queue const* const q) {
         return true;
     }
 
-    return (q->curr_n_elem == 0);
+    return q->curr_n_elem == 0;
 }
 
 bool queue_is_full(Queue const* const q) {
@@ -50,7 +51,7 @@ bool queue_is_full(Queue const* const q) {
         return false;
     }
 
-    return (q->curr_n_elem == q->n_elem);
+    return q->curr_n_elem == q->n_elem;
 }
 
 Queue_status queue_enqueue(Queue* const restrict q, void const* const restrict elem) {

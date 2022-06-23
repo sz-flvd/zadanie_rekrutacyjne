@@ -7,5 +7,6 @@ typedef struct Message Message;
 
 Message* message_create(Message_type type, char const data[]);
 void message_destroy(Message* msg);
+void message_print(Message const* msg);
 
 #endif
