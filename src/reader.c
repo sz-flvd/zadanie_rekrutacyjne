@@ -11,6 +11,11 @@
 #define FILE_NAME "/proc/stat"
 #define FILE_FLAG "r"
 
+/*  TODO
+    - add error handling
+        * all errors should be handled and reported to logger eventually
+*/
+
 void* reader(void* arg) {
     Warehouse* const w = *(Warehouse**) arg;
     srandom(time(NULL));
@@ -20,10 +25,8 @@ void* reader(void* arg) {
     size_t buf_size;
 
     while(true) {
-        /* All error handling must include sending appropriate messages to logger */
         file = fopen(FILE_NAME, FILE_FLAG);
         if(file == NULL) {
-            /* Change to handling errors with opening /proc/stat */
             printf("[READER] File %s could not be opened\n", FILE_NAME);
             continue;
         }
@@ -39,7 +42,6 @@ void* reader(void* arg) {
         rewind(file);
 
         if(buf_size == 0) {
-            /* Change to handling errors with seeking file end */
             printf("[READER] Error occured while determining file stream position\n");
             fclose(file);
             continue;
@@ -47,14 +49,12 @@ void* reader(void* arg) {
 
         buf = calloc(1, buf_size + 1);
         if(buf == NULL) {
-            /* Change to handling errors with memory alloc */
             printf("[READER] Could not allocate %zu byte of memory for file buffer\n", buf_size);
             fclose(file);
             continue;
         }
 
         if(fread(buf, buf_size, 1, file) != 1) {
-            /* Change to handling file read errors */
             printf("[READER] Reading file into buf failed\n");
             fclose(file);
             free(buf);
@@ -70,7 +70,6 @@ void* reader(void* arg) {
         */
         free(buf);
         if(msg == NULL) {
-            /* Change to sending the error message to logger also */
             printf("[READER] Created NULL message, which may not be sent to warehouse\n");
             continue;
         }

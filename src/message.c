@@ -45,3 +45,25 @@ void message_print(Message const* const msg) {
 
     printf("%s\n", msg->payload);
 }
+
+size_t message_get_payload_size(Message const* const msg) {
+    if(msg == NULL) {
+        return 0;
+    }
+
+    return msg->payload_size;
+}
+
+int message_get_payload(Message const* const restrict msg, char* const restrict buf) {
+    if(msg == NULL) {
+        return -1;
+    }
+
+    if(buf == NULL) {
+        return -2;
+    }
+
+    memcpy(buf, msg->payload, msg->payload_size);
+
+    return 0;
+}

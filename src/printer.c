@@ -6,6 +6,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/*  TODO
+    - add error handling
+        * all errors should be handled and reported to logger eventually
+*/
+
 void* printer(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
     
@@ -24,7 +29,7 @@ void* printer(void* arg) {
 
         /* Print contents of Processed_data object */
         for(size_t i = 0; i < processed_data_get_n_elem(*pd); i++) {
-            printf("CPU%zu: %.5f\n", i, processed_data_get_elem_at(*pd, i));
+            printf("CPU%zu: %.5f[%%]\n", i, processed_data_get_elem_at(*pd, i));
         }
 
         processed_data_destroy(*pd);

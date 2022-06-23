@@ -7,9 +7,16 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+#include <inttypes.h>
 #include <time.h>
 #include <sys/sysinfo.h>
+
+/*  TODO
+    - add error handling (malloc, all possible NULLs etc.)
+        * all errors should be handled and reported to logger eventually
+*/
 
 void* analyzer(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
@@ -36,14 +43,38 @@ void* analyzer(void* arg) {
         printf("[ANALYZER] Leaving first critical section\n");
         warehouse_analyzer_unlock(w);
 
-        /* Parse msg and fill Raw_data objects with parsed values */
+        char* msg_buf = malloc(message_get_payload_size(*msg));
+        message_get_payload(*msg, msg_buf);
+        char* lines[n_procs + 1];
+        char* token;
+        char* save = msg_buf;
+        size_t cnt = 0;
+
+        while(cnt < n_procs + 1 && strncmp((token = strtok_r(save, "\n", &save)), "cpu", 3) == 0) {
+            lines[cnt] = token;
+            cnt++;
+        }
+
+        free(msg_buf);
+
+        /* parse size_t elems from lines 1 to n_proc-1 (ignore line starting with cpu)*/
+        for(size_t i = 1; i < cnt; i++) {
+            save = lines[i];
+            size_t fd_count = 0;
+            token = strtok_r(save, " ", &save); /* ignore the first column in line - cpu[n] */
+            while((token = strtok_r(NULL, " ", &save)) != NULL) {
+                size_t elem = strtoumax(token, &(char*){NULL}, 10);
+                raw_data_set(curr_rd[i - 1], (Raw_data_field) fd_count, elem);
+                fd_count++;
+            }
+        }
 
         message_destroy(*msg);
         free(msg);
 
         Processed_data* pd = processed_data_create(n_procs);
         for(size_t i = 0; i < n_procs; i++) {
-            size_t usg = raw_data_calculate_usage(prev_rd[i], curr_rd[i]);
+            double usg = raw_data_calculate_usage(prev_rd[i], curr_rd[i]);
             processed_data_set(pd, i, usg);
             raw_data_copy(prev_rd[i], curr_rd[i]);
         }
