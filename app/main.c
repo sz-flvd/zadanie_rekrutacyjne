@@ -1,6 +1,6 @@
 #include <warehouse.h>
 #include <reader.h>
-#include <analyzer.h>
+#include <analyser.h>
 #include <printer.h>
 #include <watchdog.h>
 #include <logger.h>
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     pthread_t rd, an, pr, wd, lg;
 
     pthread_create(&rd, NULL, reader, (void*) &w);
-    pthread_create(&an, NULL, analyzer, (void*) &w);
+    pthread_create(&an, NULL, analyser, (void*) &w);
     pthread_create(&pr, NULL, printer, (void*) &w);
     // pthread_create(&wd, NULL, watchdog, (void*) &w);
     // pthread_create(&lg, NULL, logger, (void*) &w);

@@ -1,5 +1,5 @@
 #include <warehouse.h>
-#include <analyzer.h>
+#include <analyser.h>
 #include <message.h>
 #include <raw_data.h>
 #include <processed_data.h>
@@ -18,7 +18,7 @@
         * all errors should be handled and reported to logger eventually
 */
 
-void* analyzer(void* arg) {
+void* analyser(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
     srandom(time(NULL));
     size_t n_procs = (size_t) get_nprocs();
@@ -31,17 +31,17 @@ void* analyzer(void* arg) {
     }
 
     while(true) {
-        printf("[ANALYZER] Entering first critical section\n");
-        warehouse_analyzer_lock(w);
-        if(warehouse_analyzer_is_empty(w)) {
-            printf("[ANALYZER] Queue is empty, waiting for data from reader\n");
-            warehouse_analyzer_get_wait(w);
+        printf("[ANALYSER] Entering first critical section\n");
+        warehouse_analyser_lock(w);
+        if(warehouse_analyser_is_empty(w)) {
+            printf("[ANALYSER] Queue is empty, waiting for data from reader\n");
+            warehouse_analyser_get_wait(w);
         }
-        printf("[ANALYZER] Getting a message from queue\n");
-        Message** msg = warehouse_analyzer_get(w);
+        printf("[ANALYSER] Getting a message from queue\n");
+        Message** msg = warehouse_analyser_get(w);
         warehouse_reader_notify(w);
-        printf("[ANALYZER] Leaving first critical section\n");
-        warehouse_analyzer_unlock(w);
+        printf("[ANALYSER] Leaving first critical section\n");
+        warehouse_analyser_unlock(w);
 
         char* msg_buf = malloc(message_get_payload_size(*msg));
         message_get_payload(*msg, msg_buf);
@@ -79,20 +79,20 @@ void* analyzer(void* arg) {
             raw_data_copy(prev_rd[i], curr_rd[i]);
         }
 
-        printf("[ANALYZER] Entering second critical section\n");
+        printf("[ANALYSER] Entering second critical section\n");
         warehouse_printer_lock(w);
         if(warehouse_printer_is_full(w)) {
-            printf("[ANALYZER] Queue is full, waiting for printer to finish printing processed data and get next item\n");
-            warehouse_analyzer_put_wait(w);
+            printf("[ANALYSER] Queue is full, waiting for printer to finish printing processed data and get next item\n");
+            warehouse_analyser_put_wait(w);
         }
-        printf("[ANALYZER] Putting processed data object into queue\n");
-        warehouse_analyzer_put(w, pd);
+        printf("[ANALYSER] Putting processed data object into queue\n");
+        warehouse_analyser_put(w, pd);
         warehouse_printer_notify(w);
-        printf("[ANALYZER] Leaving second critical section\n");
+        printf("[ANALYSER] Leaving second critical section\n");
         warehouse_printer_unlock(w);
 
         long const rand_sleep = ((random() % 6) + 5) * 100;
-        printf("[ANALYZER] Sleeping for %ld millis\n", rand_sleep);
+        printf("[ANALYSER] Sleeping for %ld millis\n", rand_sleep);
         thread_sleep_millis(rand_sleep);
     }
 }

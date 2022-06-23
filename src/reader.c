@@ -75,17 +75,17 @@ void* reader(void* arg) {
         }
 
         printf("[READER] Entering critical section\n");
-        warehouse_analyzer_lock(w);
-        if(warehouse_analyzer_is_full(w)) {
+        warehouse_analyser_lock(w);
+        if(warehouse_analyser_is_full(w)) {
             printf("[READER] Queue is full, waiting for analyzer to finish processing and get next item\n");
             warehouse_reader_wait(w);
         }
 
         printf("[READER] Putting message into analyzer queue\n");
         warehouse_reader_put(w, msg);
-        warehouse_analyzer_get_notify(w);
+        warehouse_analyser_get_notify(w);
         printf("[READER] Leaving critical section\n");
-        warehouse_analyzer_unlock(w);
+        warehouse_analyser_unlock(w);
 
         long const rand_sleep = ((random() % 6) + 5) * 100;
         printf("[READER] Sleeping for %ld millis\n", rand_sleep);

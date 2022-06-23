@@ -23,7 +23,7 @@ void* printer(void* arg) {
         }
         printf("[PRINTER] Getting an object of Processed_data from queue\n");
         Processed_data** pd = warehouse_printer_get(w);
-        warehouse_analyzer_put_notify(w);
+        warehouse_analyser_put_notify(w);
         printf("[PRINTER] Leaving critical section\n");
         warehouse_printer_unlock(w);
 
