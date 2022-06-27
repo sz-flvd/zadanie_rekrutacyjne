@@ -13,7 +13,7 @@ OBJ_ALL := $(OBJ)
 DEP := $(OBJ_ALL:%.o=%.d)
 
 LIB_PATHS :=
-LIBS :=
+LIBS := pthread rt
 
 # Compiler + flag section
 CC ?= gcc

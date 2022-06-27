@@ -85,7 +85,7 @@ Queue_status queue_dequeue(Queue* const restrict q, void* const restrict elem) {
         return queue_empty;
     }
 
-    const uint8_t* const ptr = &q->content[q->tail * q->elem_size];
+    uint8_t const* const ptr = &q->content[q->tail * q->elem_size];
     memcpy(elem, ptr, q->elem_size);
 
     q->tail++;

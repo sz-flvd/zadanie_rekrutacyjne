@@ -1,11 +1,14 @@
-#include <stdlib.h>
-#include <pthread.h>
 #include <warehouse.h>
 #include <queue.h>
 #include <processed_data.h>
 #include <message.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
 
-#define QUEUE_N_ELEMS 5
+#define ANALYSER_QUEUE_N_ELEMS 5
+#define PRINTER_QUEUE_N_ELEMS 5
+#define LOGGER_QUEUE_N_ELEMS 5
 
 struct Warehouse {
     Queue* analyser_queue;
@@ -18,11 +21,8 @@ struct Warehouse {
     pthread_cond_t analyser_get_allowed;
     pthread_cond_t analyser_put_allowed;
     pthread_cond_t printer_get_allowed;
-    /* might need to change to semaphore */
-    pthread_cond_t reader_log_allowed;
-    pthread_cond_t analyser_log_allowed;
-    pthread_cond_t printer_log_allowed;
-    pthread_cond_t watchdog_log_allowed;
+    sem_t logger_empty_pos_sem;
+    sem_t logger_full_pos_sem;
 };
 
 Warehouse* warehouse_create() {
@@ -33,21 +33,20 @@ Warehouse* warehouse_create() {
     }
 
     *w = (Warehouse) {
-        .analyser_queue = queue_create(QUEUE_N_ELEMS, sizeof(Message*)),
-        .printer_queue = queue_create(QUEUE_N_ELEMS, sizeof(Processed_data*)),
-        .logger_queue = queue_create(QUEUE_N_ELEMS, sizeof(Message*)),
+        .analyser_queue = queue_create(ANALYSER_QUEUE_N_ELEMS, sizeof(Message*)),
+        .printer_queue = queue_create(PRINTER_QUEUE_N_ELEMS, sizeof(Processed_data*)),
+        .logger_queue = queue_create(LOGGER_QUEUE_N_ELEMS, sizeof(Message*)),
         .analyser_mutex = PTHREAD_MUTEX_INITIALIZER,
         .printer_mutex = PTHREAD_MUTEX_INITIALIZER,
         .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
         .reader_put_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_get_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_put_allowed = PTHREAD_COND_INITIALIZER,
-        .printer_get_allowed = PTHREAD_COND_INITIALIZER,
-        .reader_log_allowed = PTHREAD_COND_INITIALIZER,
-        .analyser_log_allowed = PTHREAD_COND_INITIALIZER,
-        .printer_log_allowed = PTHREAD_COND_INITIALIZER,
-        .watchdog_log_allowed = PTHREAD_COND_INITIALIZER
+        .printer_get_allowed = PTHREAD_COND_INITIALIZER
     };
+
+    sem_init(&w->logger_empty_pos_sem, 1, LOGGER_QUEUE_N_ELEMS);
+    sem_init(&w->logger_full_pos_sem, 1, 0);
 
     return w;
 }
@@ -57,14 +56,12 @@ void warehouse_destroy(Warehouse* const w) {
         return;
     }
 
+    sem_destroy(&w->logger_empty_pos_sem);
+    sem_destroy(&w->logger_full_pos_sem);
     pthread_cond_destroy(&w->reader_put_allowed);
     pthread_cond_destroy(&w->analyser_get_allowed);
     pthread_cond_destroy(&w->analyser_put_allowed);
     pthread_cond_destroy(&w->printer_get_allowed);
-    pthread_cond_destroy(&w->reader_log_allowed);
-    pthread_cond_destroy(&w->analyser_log_allowed);
-    pthread_cond_destroy(&w->printer_log_allowed);
-    pthread_cond_destroy(&w->watchdog_log_allowed);
     pthread_mutex_destroy(&w->analyser_mutex);
     pthread_mutex_destroy(&w->printer_mutex);
     pthread_mutex_destroy(&w->logger_mutex);
@@ -154,73 +151,21 @@ void warehouse_printer_unlock(Warehouse* const w) {
     pthread_mutex_unlock(&w->printer_mutex);
 }
 
-void warehouse_logger_lock(Warehouse* const w) {
+void warehouse_logger_lock(Warehouse* w) {
     if(w == NULL) {
         return;
     }
-    
+
+    pthread_mutex_lock(&w->logger_mutex);
 }
 
-void warehouse_logger_unlock(Warehouse* const w) {
+void warehouse_logger_unlock(Warehouse* w) {
     if(w == NULL) {
         return;
     }
-    
+
+    pthread_mutex_unlock(&w->logger_mutex);
 }
-
-void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
-    if(w == NULL || msg == NULL) {
-        return; 
-    }
-
-    queue_enqueue(w->analyser_queue, &msg);
-}
-
-Message** warehouse_analyser_get(Warehouse* const w) {
-    if(w == NULL) {
-        return NULL;
-    }
-
-    Message** const msg = malloc(sizeof(*msg));
-
-    if(msg == NULL) {
-        return NULL;
-    }
-
-    if(queue_dequeue(w->analyser_queue, msg) != queue_ok) {
-        return NULL;
-    }
-
-    return msg;
-}
-
-void warehouse_analyser_put(Warehouse* const w, Processed_data const* const pd) {
-    if(w == NULL || pd == NULL) {
-        return;
-    }
-
-    queue_enqueue(w->printer_queue, &pd);
-}
-
-Processed_data** warehouse_printer_get(Warehouse* const w) {
-    if(w == NULL) {
-        return NULL;
-    }
-
-    Processed_data** pd = malloc(sizeof(*pd));
-
-    if(pd == NULL) {
-        return NULL;
-    }
-
-    if(queue_dequeue(w->printer_queue, pd) != queue_ok) {
-        return NULL;
-    }
-
-    return pd;
-}
-
-/* add function which allows tasks to post to logger queue */
 
 void warehouse_reader_wait(Warehouse* const w) {
     if(w == NULL) {
@@ -286,4 +231,112 @@ void warehouse_printer_notify(Warehouse* const w) {
     pthread_cond_signal(&w->printer_get_allowed);
 }
 
-/* add handling logger queue */
+void warehouse_logger_empty_pos_sem_wait(Warehouse* w) {
+    if(w == NULL) {
+        return;
+    }
+
+    sem_wait(&w->logger_empty_pos_sem);
+}
+
+void warehouse_logger_empty_pos_sem_post(Warehouse* w) {
+    if(w == NULL) {
+        return;
+    }
+
+    sem_post(&w->logger_empty_pos_sem);
+}
+
+void warehouse_logger_full_pos_sem_wait(Warehouse* w) {
+    if(w == NULL) {
+        return;
+    }
+
+    sem_wait(&w->logger_full_pos_sem);
+}
+
+void warehouse_logger_full_pos_sem_post(Warehouse* w) {
+    if(w == NULL) {
+        return;
+    }
+
+    sem_post(&w->logger_full_pos_sem);
+}
+
+void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
+    if(w == NULL || msg == NULL) {
+        return; 
+    }
+
+    queue_enqueue(w->analyser_queue, &msg);
+}
+
+Message** warehouse_analyser_get(Warehouse* const w) {
+    if(w == NULL) {
+        return NULL;
+    }
+
+    Message** const msg = malloc(sizeof(*msg));
+
+    if(msg == NULL) {
+        return NULL;
+    }
+
+    if(queue_dequeue(w->analyser_queue, msg) != queue_ok) {
+        return NULL;
+    }
+
+    return msg;
+}
+
+void warehouse_analyser_put(Warehouse* const w, Processed_data const* const pd) {
+    if(w == NULL || pd == NULL) {
+        return;
+    }
+
+    queue_enqueue(w->printer_queue, &pd);
+}
+
+Processed_data** warehouse_printer_get(Warehouse* const w) {
+    if(w == NULL) {
+        return NULL;
+    }
+
+    Processed_data** pd = malloc(sizeof(*pd));
+
+    if(pd == NULL) {
+        return NULL;
+    }
+
+    if(queue_dequeue(w->printer_queue, pd) != queue_ok) {
+        return NULL;
+    }
+
+    return pd;
+}
+
+void warehouse_thread_put_to_logger(Warehouse* w, Message const* msg) {
+    if(w == NULL || msg == NULL) {
+        return;
+    }
+
+    queue_enqueue(w->logger_queue, &msg);
+}
+
+Message** warehouse_logger_get(Warehouse* w) {
+    if(w == NULL) {
+        return NULL;
+    }
+
+    Message** msg = malloc(sizeof(*w));
+
+    if(msg == NULL) {
+        return NULL;
+    }
+
+    if(queue_dequeue(w->logger_queue, msg) != queue_ok) {
+        return NULL;
+    }
+
+    return msg;
+}

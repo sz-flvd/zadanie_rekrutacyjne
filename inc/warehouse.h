@@ -1,9 +1,9 @@
 #ifndef WAREHOUSE_H
 #define WAREHOUSE_H
 
+#include <message.h>
+#include <processed_data.h>
 #include <stdbool.h>
-#include "message.h"
-#include "processed_data.h"
 
 typedef struct Warehouse Warehouse;
 
@@ -24,12 +24,6 @@ void warehouse_printer_unlock(Warehouse* w);
 void warehouse_logger_lock(Warehouse* w);
 void warehouse_logger_unlock(Warehouse* w);
 
-void warehouse_reader_put(Warehouse* w, Message const* m);
-Message** warehouse_analyser_get(Warehouse* w);
-void warehouse_analyser_put(Warehouse* w, Processed_data const* pd);
-Processed_data** warehouse_printer_get(Warehouse* w);
-/* add function which allows tasks to post to logger queue */
-
 void warehouse_reader_wait(Warehouse* w);
 void warehouse_reader_notify(Warehouse* w);
 void warehouse_analyser_get_wait(Warehouse* w);
@@ -38,6 +32,16 @@ void warehouse_analyser_put_wait(Warehouse* w);
 void warehouse_analyser_put_notify(Warehouse* w);
 void warehouse_printer_wait(Warehouse* w);
 void warehouse_printer_notify(Warehouse* w);
-/* add handling logger queue */
+void warehouse_logger_empty_pos_sem_wait(Warehouse* w);
+void warehouse_logger_empty_pos_sem_post(Warehouse* w);
+void warehouse_logger_full_pos_sem_wait(Warehouse* w);
+void warehouse_logger_full_pos_sem_post(Warehouse* w);
+
+void warehouse_reader_put(Warehouse* w, Message const* msg);
+Message** warehouse_analyser_get(Warehouse* w);
+void warehouse_analyser_put(Warehouse* w, Processed_data const* pd);
+Processed_data** warehouse_printer_get(Warehouse* w);
+void warehouse_thread_put_to_logger(Warehouse* w, Message const* msg);
+Message** warehouse_logger_get(Warehouse* w);
 
 #endif
