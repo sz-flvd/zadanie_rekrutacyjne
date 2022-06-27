@@ -71,3 +71,17 @@ int message_get_payload(Message const* const restrict msg, char* const restrict 
 
     return 0;
 }
+
+int message_get_init_time(Message const* const restrict msg, struct tm* const restrict dest_time) {
+    if(msg == NULL) {
+        return -1;
+    }
+
+    if(dest_time == NULL) {
+        return -2;
+    }
+
+    memcpy(dest_time, &msg->init_time, sizeof(msg->init_time));
+    
+    return 0;
+}

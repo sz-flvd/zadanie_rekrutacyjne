@@ -22,8 +22,8 @@ C_FLAGS := -Wall -Wextra -mavx -pthread
 DEP_FLAGS := -MMD -MP
 
 HDR_INC := $(addprefix -I,$(INC_DIRS))
-LIB_INC := $(foreach l, $(LIBS), -l$l)
-LIB_PATH := $(foreach p, $(LIB_PATHS), -L$p)
+LIB_INC := $(addprefix -l,$(LIBS))
+LIB_PATH := $(addprefix -L$(LIB_PATHS))
 
 ifeq ($(CC),clang)
 	OTHER_FLAGS += -Weverything

@@ -91,8 +91,8 @@ void* analyser(void* arg) {
         printf("[ANALYSER] Leaving second critical section\n");
         warehouse_printer_unlock(w);
 
-        long const rand_sleep = ((random() % 6) + 5) * 100;
-        printf("[ANALYSER] Sleeping for %ld millis\n", rand_sleep);
-        thread_sleep_millis(rand_sleep);
+        long const sleep_dur = ((random() % 6) + 5) * 100;
+        printf("[ANALYSER] Sleeping for %ld millis\n", sleep_dur);
+        thread_sleep_millis(sleep_dur);
     }
 }
