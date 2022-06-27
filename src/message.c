@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
+#include <time.h>
 
 struct Message {
+    struct tm init_time;
     size_t payload_size;
     Message_type type;
     char payload[];
@@ -15,7 +17,7 @@ Message* message_create(Message_type const type, char const data[const]) {
         return NULL;
     }
 
-    const size_t len = strlen(data) + 1;
+    size_t const len = strlen(data) + 1;
 
     Message* const message = malloc(sizeof(*message) + sizeof(*message->payload) * len);
 
@@ -23,6 +25,8 @@ Message* message_create(Message_type const type, char const data[const]) {
         return NULL;
     }
 
+    time_t const t = time(NULL);
+    message->init_time = *localtime(&t);
     message->payload_size = sizeof(*message->payload) * len;
     message->type = type;
     memcpy(message->payload, data, message->payload_size);

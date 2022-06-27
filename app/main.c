@@ -16,13 +16,13 @@ int main(int argc, char* argv[]) {
     pthread_create(&an, NULL, analyser, (void*) &w);
     pthread_create(&pr, NULL, printer, (void*) &w);
     // pthread_create(&wd, NULL, watchdog, (void*) &w);
-    // pthread_create(&lg, NULL, logger, (void*) &w);
+    pthread_create(&lg, NULL, logger, (void*) &w);
 
     pthread_join(rd, NULL);
     pthread_join(an, NULL);
     pthread_join(pr, NULL);
     // pthread_join(wd, NULL);
-    // pthread_join(lg, NULL);
+    pthread_join(lg, NULL);
 
     warehouse_destroy(w);
 
