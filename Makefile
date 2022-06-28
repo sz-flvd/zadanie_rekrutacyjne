@@ -23,7 +23,7 @@ DEP_FLAGS := -MMD -MP
 
 HDR_INC := $(addprefix -I,$(INC_DIRS))
 LIB_INC := $(addprefix -l,$(LIBS))
-LIB_PATH := $(addprefix -L$(LIB_PATHS))
+LIB_PATH := $(addprefix -L,$(LIB_PATHS))
 
 ifeq ($(CC),clang)
 	OTHER_FLAGS += -Weverything

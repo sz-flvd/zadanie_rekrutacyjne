@@ -10,6 +10,7 @@
 
 #define FILE_NAME "/proc/stat"
 #define FILE_FLAG "r"
+#define SLEEP_INFO_SIZE 34
 
 /*  TODO
     - add error handling
@@ -27,7 +28,7 @@ void* reader(void* arg) {
     while(true) {
         file = fopen(FILE_NAME, FILE_FLAG);
         if(file == NULL) {
-            printf("[READER] File %s could not be opened\n", FILE_NAME);
+            warehouse_thread_put_to_logger(w, "[READER] File /proc/stat could not be opened", error);
             continue;
         }
 
@@ -42,20 +43,20 @@ void* reader(void* arg) {
         rewind(file);
 
         if(buf_size == 0) {
-            printf("[READER] Error occured while determining file stream position\n");
+            warehouse_thread_put_to_logger(w, "[READER] Determining size of buffer for Message failed", error);
             fclose(file);
             continue;
         }
 
         buf = calloc(1, buf_size + 1);
         if(buf == NULL) {
-            printf("[READER] Could not allocate %zu byte of memory for file buffer\n", buf_size);
+            warehouse_thread_put_to_logger(w, "[READER] Could not allocate memory for file buffer", error);
             fclose(file);
             continue;
         }
 
         if(fread(buf, buf_size, 1, file) != 1) {
-            printf("[READER] Reading file into buf failed\n");
+            warehouse_thread_put_to_logger(w, "[READER] Reading file into buf failed", error);
             fclose(file);
             free(buf);
             continue;
@@ -70,25 +71,27 @@ void* reader(void* arg) {
         */
         free(buf);
         if(msg == NULL) {
-            printf("[READER] Created NULL message, which may not be sent to warehouse\n");
+            warehouse_thread_put_to_logger(w, "[READER] Created NULL message, which may not be sent to warehouse", error);
             continue;
         }
 
-        printf("[READER] Entering critical section\n");
+        warehouse_thread_put_to_logger(w, "[READER] Entering critical section", info);
         warehouse_analyser_lock(w);
         if(warehouse_analyser_is_full(w)) {
-            printf("[READER] Queue is full, waiting for analyzer to finish processing and get next item\n");
+            warehouse_thread_put_to_logger(w, "[READER] Queue is full, waiting for analyzer to finish processing and get next item", info);
             warehouse_reader_wait(w);
         }
 
-        printf("[READER] Putting message into analyzer queue\n");
+        warehouse_thread_put_to_logger(w, "[READER] Putting message in analyzer queue", info);
         warehouse_reader_put(w, msg);
         warehouse_analyser_get_notify(w);
-        printf("[READER] Leaving critical section\n");
+        warehouse_thread_put_to_logger(w, "[READER] Leaving critical section", info);
         warehouse_analyser_unlock(w);
 
         long const sleep_dur = ((random() % 6) + 5) * 100;
-        printf("[READER] Sleeping for %ld millis\n", sleep_dur);
+        char info_buf[SLEEP_INFO_SIZE];
+        sprintf(info_buf, "[READER] Sleeping for %ld millis", sleep_dur);
+        warehouse_thread_put_to_logger(w, info_buf, info);
         thread_sleep_millis(sleep_dur);
     }
 }

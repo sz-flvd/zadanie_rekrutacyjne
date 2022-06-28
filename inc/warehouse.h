@@ -41,7 +41,7 @@ void warehouse_reader_put(Warehouse* w, Message const* msg);
 Message** warehouse_analyser_get(Warehouse* w);
 void warehouse_analyser_put(Warehouse* w, Processed_data const* pd);
 Processed_data** warehouse_printer_get(Warehouse* w);
-void warehouse_thread_put_to_logger(Warehouse* w, Message const* msg);
+void warehouse_thread_put_to_logger(Warehouse* w, char const* str, Message_type type);
 Message** warehouse_logger_get(Warehouse* w);
 
 #endif

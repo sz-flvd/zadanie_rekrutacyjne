@@ -5,6 +5,8 @@
 #include <string.h>
 #include <time.h>
 
+char const* const msg_type_str[] = {"empty", "raw data", "info", "error"};
+
 struct Message {
     struct tm init_time;
     size_t payload_size;
@@ -50,6 +52,36 @@ void message_print(Message const* const msg) {
     printf("%s\n", msg->payload);
 }
 
+Message_type message_get_type(Message const* const msg) {
+    if(msg == NULL) {
+        return empty;
+    }
+
+    return msg->type;
+}
+
+size_t message_get_type_str_size(Message const* const msg) {
+    if(msg == NULL) {
+        return 0;
+    }
+
+    return strlen(msg_type_str[msg->type]) + 1;
+}
+
+int message_get_type_str(Message const* const restrict msg, char* const restrict buf) {
+    if(msg == NULL) {
+        return -1;
+    }
+
+    if(buf == NULL) {
+        return -2;
+    }
+
+    strcpy(buf, msg_type_str[msg->type]);
+
+    return 0;
+}
+
 size_t message_get_payload_size(Message const* const msg) {
     if(msg == NULL) {
         return 0;
@@ -67,7 +99,7 @@ int message_get_payload(Message const* const restrict msg, char* const restrict 
         return -2;
     }
 
-    memcpy(buf, msg->payload, msg->payload_size);
+    strcpy(buf, msg->payload);
 
     return 0;
 }

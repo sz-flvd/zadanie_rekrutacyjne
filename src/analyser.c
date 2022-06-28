@@ -13,10 +13,7 @@
 #include <time.h>
 #include <sys/sysinfo.h>
 
-/*  TODO
-    - add error handling (malloc, all possible NULLs etc.)
-        * all errors should be handled and reported to logger eventually
-*/
+#define SLEEP_INFO_SIZE 36
 
 void* analyser(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
@@ -31,20 +28,34 @@ void* analyser(void* arg) {
     }
 
     while(true) {
-        printf("[ANALYSER] Entering first critical section\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Entering first critical section", info);
         warehouse_analyser_lock(w);
         if(warehouse_analyser_is_empty(w)) {
-            printf("[ANALYSER] Queue is empty, waiting for data from reader\n");
+            warehouse_thread_put_to_logger(w, "[ANALYSER] Queue is empty, waiting for data from reader", info);
             warehouse_analyser_get_wait(w);
         }
-        printf("[ANALYSER] Getting a message from queue\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Getting a message from queue", info);
         Message** msg = warehouse_analyser_get(w);
         warehouse_reader_notify(w);
-        printf("[ANALYSER] Leaving first critical section\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Leaving first critical section", info);
         warehouse_analyser_unlock(w);
 
         char* msg_buf = malloc(message_get_payload_size(*msg));
-        message_get_payload(*msg, msg_buf);
+        
+        if(msg_buf == NULL) {
+            warehouse_thread_put_to_logger(w, "[ANALYSER] Couldn't allocate memory for Message buffer", error);
+            message_destroy(*msg);
+            free(msg);
+            continue;
+        }
+
+        if(message_get_payload(*msg, msg_buf) != 0) {
+            warehouse_thread_put_to_logger(w, "[ANALYSER] Getting Message payload failed", error);
+            message_destroy(*msg);
+            free(msg);
+            continue;
+        }
+
         char* lines[n_procs + 1];
         char* token;
         char* save = msg_buf;
@@ -56,6 +67,8 @@ void* analyser(void* arg) {
         }
 
         free(msg_buf);
+        message_destroy(*msg);
+        free(msg);
 
         /* parse size_t elems from lines 1 to n_proc-1 (ignore line starting with cpu)*/
         for(size_t i = 1; i < cnt; i++) {
@@ -69,30 +82,35 @@ void* analyser(void* arg) {
             }
         }
 
-        message_destroy(*msg);
-        free(msg);
-
         Processed_data* pd = processed_data_create(n_procs);
+
+        if(pd == NULL) {
+            warehouse_thread_put_to_logger(w, "[ANALYSER] Failed to create object of Processed_data", error);
+            continue;
+        }
+
         for(size_t i = 0; i < n_procs; i++) {
             double usg = raw_data_calculate_usage(prev_rd[i], curr_rd[i]);
             processed_data_set(pd, i, usg);
             raw_data_copy(prev_rd[i], curr_rd[i]);
         }
 
-        printf("[ANALYSER] Entering second critical section\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Entering second critical section", info);
         warehouse_printer_lock(w);
         if(warehouse_printer_is_full(w)) {
-            printf("[ANALYSER] Queue is full, waiting for printer to finish printing processed data and get next item\n");
+            warehouse_thread_put_to_logger(w, "[ANALYSER] Queue is full, waiting for printer to finish printing processed data and get next item", info);
             warehouse_analyser_put_wait(w);
         }
-        printf("[ANALYSER] Putting processed data object into queue\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Putting processed data object into queue", info);
         warehouse_analyser_put(w, pd);
         warehouse_printer_notify(w);
-        printf("[ANALYSER] Leaving second critical section\n");
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Leaving second critical section", info);
         warehouse_printer_unlock(w);
 
         long const sleep_dur = ((random() % 6) + 5) * 100;
-        printf("[ANALYSER] Sleeping for %ld millis\n", sleep_dur);
+        char info_buf[SLEEP_INFO_SIZE];
+        sprintf(info_buf, "[ANALYSER] Sleeping for %ld millis", sleep_dur);
+        warehouse_thread_put_to_logger(w, info_buf, info);
         thread_sleep_millis(sleep_dur);
     }
 }

@@ -3,6 +3,7 @@
 #include <processed_data.h>
 #include <message.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
 
@@ -282,7 +283,7 @@ Message** warehouse_analyser_get(Warehouse* const w) {
         return NULL;
     }
 
-    if(queue_dequeue(w->analyser_queue, msg) != queue_ok) {
+    if(queue_dequeue(w->analyser_queue, (void*) msg) != queue_ok) {
         return NULL;
     }
 
@@ -315,20 +316,34 @@ Processed_data** warehouse_printer_get(Warehouse* const w) {
     return pd;
 }
 
-void warehouse_thread_put_to_logger(Warehouse* w, Message const* msg) {
-    if(w == NULL || msg == NULL) {
+void warehouse_thread_put_to_logger(Warehouse* const w, char const* const str, Message_type const type) {
+    if(w == NULL || str == NULL) {
         return;
     }
 
+    Message* msg = message_create(type, str);
+
+    warehouse_logger_lock(w);
+  
+    if(warehouse_logger_is_full(w)) {
+        warehouse_logger_unlock(w);
+        warehouse_logger_empty_pos_sem_wait(w);
+        warehouse_logger_lock(w);
+    } else {
+        warehouse_logger_empty_pos_sem_wait(w);
+    }
+  
     queue_enqueue(w->logger_queue, &msg);
+    warehouse_logger_full_pos_sem_post(w);
+    warehouse_logger_unlock(w);
 }
 
-Message** warehouse_logger_get(Warehouse* w) {
+Message** warehouse_logger_get(Warehouse* const w) {
     if(w == NULL) {
         return NULL;
     }
 
-    Message** msg = malloc(sizeof(*w));
+    Message** msg = malloc(sizeof(*msg));
 
     if(msg == NULL) {
         return NULL;
