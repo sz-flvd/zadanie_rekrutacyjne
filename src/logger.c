@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
+#include <signal.h>
 
 #define LOG_FILE_NAME "log"
 #define LOG_FILE_FLAG "a"
@@ -15,22 +15,27 @@
 
 void* logger(void* arg) {
     Warehouse* w = *(Warehouse**) arg;
-    //srandom(time(NULL));
     FILE* file = fopen(LOG_FILE_NAME, LOG_FILE_FLAG);
+    
 
     if(file == NULL) {
         /* Do some error handling */
     }
     
-    while(true) {
+    while(!warehouse_logger_is_done()) {
         warehouse_logger_lock(w);
         
         if(warehouse_logger_is_empty(w)) {
             warehouse_logger_unlock(w);
-            warehouse_logger_full_pos_sem_wait(w);
+            if(warehouse_logger_full_pos_sem_wait(w) != 0) {
+                continue;
+            }
             warehouse_logger_lock(w);
         } else {
-            warehouse_logger_full_pos_sem_wait(w);
+            if(warehouse_logger_full_pos_sem_wait(w) != 0) {
+                warehouse_logger_unlock(w);
+                continue;
+            }
         }
         
         Message** msg = warehouse_logger_get(w);
@@ -63,4 +68,6 @@ void* logger(void* arg) {
     }
 
     fclose(file);
+    
+    return NULL;
 }

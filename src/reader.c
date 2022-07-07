@@ -12,11 +12,6 @@
 #define FILE_FLAG "r"
 #define SLEEP_INFO_SIZE 34
 
-/*  TODO
-    - add error handling
-        * all errors should be handled and reported to logger eventually
-*/
-
 void* reader(void* arg) {
     Warehouse* const w = *(Warehouse**) arg;
     srandom(time(NULL));
@@ -25,7 +20,7 @@ void* reader(void* arg) {
     char c;
     size_t buf_size;
 
-    while(true) {
+    while(!warehouse_reader_is_done()) {
         file = fopen(FILE_NAME, FILE_FLAG);
         if(file == NULL) {
             warehouse_thread_put_to_logger(w, "[READER] File /proc/stat could not be opened", error);
@@ -79,7 +74,11 @@ void* reader(void* arg) {
         warehouse_analyser_lock(w);
         if(warehouse_analyser_is_full(w)) {
             warehouse_thread_put_to_logger(w, "[READER] Queue is full, waiting for analyzer to finish processing and get next item", info);
-            warehouse_reader_wait(w);
+            if(warehouse_reader_wait(w) != 0) {
+                warehouse_analyser_unlock(w);
+                message_destroy(msg);
+                continue;
+            }
         }
 
         warehouse_thread_put_to_logger(w, "[READER] Putting message in analyzer queue", info);
@@ -94,4 +93,6 @@ void* reader(void* arg) {
         warehouse_thread_put_to_logger(w, info_buf, info);
         thread_sleep_millis(sleep_dur);
     }
+
+    return NULL;
 }

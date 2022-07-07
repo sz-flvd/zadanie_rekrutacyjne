@@ -6,45 +6,69 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <time.h>
+#include <signal.h>
 
 #define ANALYSER_QUEUE_N_ELEMS 5
 #define PRINTER_QUEUE_N_ELEMS 5
 #define LOGGER_QUEUE_N_ELEMS 5
 
+static sig_atomic_t volatile reader_done = 0;
+static sig_atomic_t volatile analyser_done = 0;
+static sig_atomic_t volatile printer_done = 0;
+static sig_atomic_t volatile watchdog_done = 0;
+static sig_atomic_t volatile logger_done = 0;
+
+void terminate(int signum);
+
+void terminate(int const signum) {
+    reader_done = 1;
+    analyser_done = 1;
+    printer_done = 1;
+    watchdog_done = 1;
+    logger_done = 1;
+}
+
 struct Warehouse {
-    Queue* analyser_queue;
-    Queue* printer_queue;
-    Queue* logger_queue;
-    pthread_mutex_t analyser_mutex;
-    pthread_mutex_t printer_mutex;
-    pthread_mutex_t logger_mutex;
+    struct sigaction sigcatch;
     pthread_cond_t reader_put_allowed;
     pthread_cond_t analyser_get_allowed;
     pthread_cond_t analyser_put_allowed;
     pthread_cond_t printer_get_allowed;
+    pthread_mutex_t analyser_mutex;
+    pthread_mutex_t printer_mutex;
+    pthread_mutex_t logger_mutex;
     sem_t logger_empty_pos_sem;
     sem_t logger_full_pos_sem;
+    struct timespec wait_timeout;
+    Queue* analyser_queue;
+    Queue* printer_queue;
+    Queue* logger_queue;
 };
 
 Warehouse* warehouse_create() {
     Warehouse* w = malloc(sizeof(*w));
-
+    
     if(w == NULL) {
         return NULL;
     }
 
     *w = (Warehouse) {
-        .analyser_queue = queue_create(ANALYSER_QUEUE_N_ELEMS, sizeof(Message*)),
-        .printer_queue = queue_create(PRINTER_QUEUE_N_ELEMS, sizeof(Processed_data*)),
-        .logger_queue = queue_create(LOGGER_QUEUE_N_ELEMS, sizeof(Message*)),
-        .analyser_mutex = PTHREAD_MUTEX_INITIALIZER,
-        .printer_mutex = PTHREAD_MUTEX_INITIALIZER,
-        .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .sigcatch = {.sa_handler = terminate},
         .reader_put_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_get_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_put_allowed = PTHREAD_COND_INITIALIZER,
-        .printer_get_allowed = PTHREAD_COND_INITIALIZER
+        .printer_get_allowed = PTHREAD_COND_INITIALIZER,
+        .analyser_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .printer_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .wait_timeout = {.tv_sec = 2},
+        .analyser_queue = queue_create(ANALYSER_QUEUE_N_ELEMS, sizeof(Message*)),
+        .printer_queue = queue_create(PRINTER_QUEUE_N_ELEMS, sizeof(Processed_data*)),
+        .logger_queue = queue_create(LOGGER_QUEUE_N_ELEMS, sizeof(Message*))
     };
+
+    sigaction(SIGTERM, &w->sigcatch, NULL);
 
     sem_init(&w->logger_empty_pos_sem, 1, LOGGER_QUEUE_N_ELEMS);
     sem_init(&w->logger_full_pos_sem, 1, 0);
@@ -55,6 +79,24 @@ Warehouse* warehouse_create() {
 void warehouse_destroy(Warehouse* const w) {
     if(w == NULL) {
         return;
+    }
+
+    while(!warehouse_analyser_is_empty(w)) {
+        Message** const msg = warehouse_analyser_get(w);
+        message_destroy(*msg);
+        free(msg);
+    }
+
+    while(!warehouse_printer_is_empty(w)) {
+        Processed_data** const pd = warehouse_printer_get(w);
+        processed_data_destroy(*pd);
+        free(pd);
+    }
+
+    while(!warehouse_logger_is_empty(w)) {
+        Message** const msg = warehouse_logger_get(w);
+        message_destroy(*msg);
+        free(msg);
     }
 
     sem_destroy(&w->logger_empty_pos_sem);
@@ -70,6 +112,26 @@ void warehouse_destroy(Warehouse* const w) {
     queue_destroy(w->printer_queue);
     queue_destroy(w->logger_queue);
     free(w);
+}
+
+bool warehouse_reader_is_done() {
+    return reader_done != 0;
+}
+
+bool warehouse_analyser_is_done() {
+    return analyser_done != 0;
+}
+
+bool warehouse_printer_is_done() {
+    return printer_done != 0;
+}
+
+bool warehouse_watchdog_is_done() {
+    return watchdog_done != 0;
+}
+
+bool warehouse_logger_is_done() {
+    return logger_done != 0;
 }
 
 bool warehouse_analyser_is_full(Warehouse const* const w) {
@@ -168,12 +230,12 @@ void warehouse_logger_unlock(Warehouse* w) {
     pthread_mutex_unlock(&w->logger_mutex);
 }
 
-void warehouse_reader_wait(Warehouse* const w) {
+int warehouse_reader_wait(Warehouse* const w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
     
-    pthread_cond_wait(&w->reader_put_allowed, &w->analyser_mutex);
+    return pthread_cond_timedwait(&w->reader_put_allowed, &w->analyser_mutex, &w->wait_timeout);
 }
 
 void warehouse_reader_notify(Warehouse* const w) {
@@ -184,12 +246,12 @@ void warehouse_reader_notify(Warehouse* const w) {
     pthread_cond_signal(&w->reader_put_allowed);
 }
 
-void warehouse_analyser_get_wait(Warehouse* const w) {
+int warehouse_analyser_get_wait(Warehouse* const w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
     
-    pthread_cond_wait(&w->analyser_get_allowed, &w->analyser_mutex);
+    return pthread_cond_timedwait(&w->analyser_get_allowed, &w->analyser_mutex, &w->wait_timeout);
 }
 
 void warehouse_analyser_get_notify(Warehouse* const w) {
@@ -200,12 +262,12 @@ void warehouse_analyser_get_notify(Warehouse* const w) {
     pthread_cond_signal(&w->analyser_get_allowed);
 }
 
-void warehouse_analyser_put_wait(Warehouse* const w) {
+int warehouse_analyser_put_wait(Warehouse* const w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
     
-    pthread_cond_wait(&w->analyser_put_allowed, &w->printer_mutex);
+    return pthread_cond_timedwait(&w->analyser_put_allowed, &w->printer_mutex, &w->wait_timeout);
 }
 
 void warehouse_analyser_put_notify(Warehouse* const w) {
@@ -216,12 +278,12 @@ void warehouse_analyser_put_notify(Warehouse* const w) {
     pthread_cond_signal(&w->analyser_put_allowed);
 }
 
-void warehouse_printer_wait(Warehouse* const w) {
+int warehouse_printer_wait(Warehouse* const w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
     
-    pthread_cond_wait(&w->printer_get_allowed, &w->printer_mutex);
+    return pthread_cond_timedwait(&w->printer_get_allowed, &w->printer_mutex, &w->wait_timeout);
 }
 
 void warehouse_printer_notify(Warehouse* const w) {
@@ -232,12 +294,12 @@ void warehouse_printer_notify(Warehouse* const w) {
     pthread_cond_signal(&w->printer_get_allowed);
 }
 
-void warehouse_logger_empty_pos_sem_wait(Warehouse* w) {
+int warehouse_logger_empty_pos_sem_wait(Warehouse* w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
 
-    sem_wait(&w->logger_empty_pos_sem);
+    return sem_timedwait(&w->logger_empty_pos_sem, &w->wait_timeout);
 }
 
 void warehouse_logger_empty_pos_sem_post(Warehouse* w) {
@@ -248,12 +310,12 @@ void warehouse_logger_empty_pos_sem_post(Warehouse* w) {
     sem_post(&w->logger_empty_pos_sem);
 }
 
-void warehouse_logger_full_pos_sem_wait(Warehouse* w) {
+int warehouse_logger_full_pos_sem_wait(Warehouse* w) {
     if(w == NULL) {
-        return;
+        return -1;
     }
 
-    sem_wait(&w->logger_full_pos_sem);
+    return sem_timedwait(&w->logger_full_pos_sem, &w->wait_timeout);
 }
 
 void warehouse_logger_full_pos_sem_post(Warehouse* w) {
@@ -269,7 +331,7 @@ void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
         return; 
     }
 
-    queue_enqueue(w->analyser_queue, &msg);
+    queue_enqueue(w->analyser_queue, (void*) &msg);
 }
 
 Message** warehouse_analyser_get(Warehouse* const w) {
@@ -295,7 +357,7 @@ void warehouse_analyser_put(Warehouse* const w, Processed_data const* const pd) 
         return;
     }
 
-    queue_enqueue(w->printer_queue, &pd);
+    queue_enqueue(w->printer_queue, (void*) &pd);
 }
 
 Processed_data** warehouse_printer_get(Warehouse* const w) {
@@ -309,7 +371,7 @@ Processed_data** warehouse_printer_get(Warehouse* const w) {
         return NULL;
     }
 
-    if(queue_dequeue(w->printer_queue, pd) != queue_ok) {
+    if(queue_dequeue(w->printer_queue, (void*) pd) != queue_ok) {
         return NULL;
     }
 
@@ -327,13 +389,20 @@ void warehouse_thread_put_to_logger(Warehouse* const w, char const* const str, M
   
     if(warehouse_logger_is_full(w)) {
         warehouse_logger_unlock(w);
-        warehouse_logger_empty_pos_sem_wait(w);
+        if(warehouse_logger_empty_pos_sem_wait(w) != 0) {
+            message_destroy(msg);
+            return;
+        }
         warehouse_logger_lock(w);
     } else {
-        warehouse_logger_empty_pos_sem_wait(w);
+        if(warehouse_logger_empty_pos_sem_wait(w) != 0) {
+            warehouse_logger_unlock(w);
+            message_destroy(msg);
+            return;
+        }
     }
   
-    queue_enqueue(w->logger_queue, &msg);
+    queue_enqueue(w->logger_queue, (void*) &msg);
     warehouse_logger_full_pos_sem_post(w);
     warehouse_logger_unlock(w);
 }
@@ -349,7 +418,7 @@ Message** warehouse_logger_get(Warehouse* const w) {
         return NULL;
     }
 
-    if(queue_dequeue(w->logger_queue, msg) != queue_ok) {
+    if(queue_dequeue(w->logger_queue, (void*) msg) != queue_ok) {
         return NULL;
     }
 

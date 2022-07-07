@@ -27,12 +27,15 @@ void* analyser(void* arg) {
         curr_rd[i] = raw_data_create();
     }
 
-    while(true) {
+    while(!warehouse_analyser_is_done()) {
         warehouse_thread_put_to_logger(w, "[ANALYSER] Entering first critical section", info);
         warehouse_analyser_lock(w);
         if(warehouse_analyser_is_empty(w)) {
             warehouse_thread_put_to_logger(w, "[ANALYSER] Queue is empty, waiting for data from reader", info);
-            warehouse_analyser_get_wait(w);
+            if(warehouse_analyser_get_wait(w) != 0) {
+                warehouse_analyser_unlock(w);
+                continue;
+            }
         }
         warehouse_thread_put_to_logger(w, "[ANALYSER] Getting a message from queue", info);
         Message** msg = warehouse_analyser_get(w);
@@ -57,13 +60,14 @@ void* analyser(void* arg) {
         }
 
         char* lines[n_procs + 1];
-        char* token;
         char* save = msg_buf;
+        char* token = strtok(save, "\n");
         size_t cnt = 0;
 
-        while(cnt < n_procs + 1 && strncmp((token = strtok_r(save, "\n", &save)), "cpu", 3) == 0) {
+        while(cnt < n_procs + 1 && strncmp(token, "cpu", 3) == 0) {
             lines[cnt] = token;
             cnt++;
+            token = strtok(NULL, "\n");
         }
 
         free(msg_buf);
@@ -74,8 +78,8 @@ void* analyser(void* arg) {
         for(size_t i = 1; i < cnt; i++) {
             save = lines[i];
             size_t fd_count = 0;
-            token = strtok_r(save, " ", &save); /* ignore the first column in line - cpu[n] */
-            while((token = strtok_r(NULL, " ", &save)) != NULL) {
+            token = strtok(save, " "); /* ignore the first column in line - cpu[n] */
+            while((token = strtok(NULL, " ")) != NULL) {
                 size_t elem = strtoumax(token, &(char*){NULL}, 10);
                 raw_data_set(curr_rd[i - 1], (Raw_data_field) fd_count, elem);
                 fd_count++;
@@ -99,7 +103,11 @@ void* analyser(void* arg) {
         warehouse_printer_lock(w);
         if(warehouse_printer_is_full(w)) {
             warehouse_thread_put_to_logger(w, "[ANALYSER] Queue is full, waiting for printer to finish printing processed data and get next item", info);
-            warehouse_analyser_put_wait(w);
+            if(warehouse_analyser_put_wait(w) != 0) {
+                warehouse_printer_unlock(w);
+                processed_data_destroy(pd);
+                continue;
+            }
         }
         warehouse_thread_put_to_logger(w, "[ANALYSER] Putting processed data object into queue", info);
         warehouse_analyser_put(w, pd);
@@ -113,4 +121,11 @@ void* analyser(void* arg) {
         warehouse_thread_put_to_logger(w, info_buf, info);
         thread_sleep_millis(sleep_dur);
     }
+
+    for(size_t i = 0; i < n_procs; i++) {
+        raw_data_destroy(prev_rd[i]);
+        raw_data_destroy(curr_rd[i]);
+    }
+
+    return NULL;
 }
