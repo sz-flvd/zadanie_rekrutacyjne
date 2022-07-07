@@ -11,5 +11,4 @@ Featured task-specific threads include:
 * Logger - takes informations (for debug purposses etc.) from each task and stores them in file.
 
 Other features include:
-* catching SIGTERM to exit safely.
-.
+* catching SIGTERM to exit safely

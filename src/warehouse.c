@@ -385,6 +385,10 @@ void warehouse_thread_put_to_logger(Warehouse* const w, char const* const str, M
 
     Message* msg = message_create(type, str);
 
+    if(msg == NULL) {
+        return;
+    }
+
     warehouse_logger_lock(w);
   
     if(warehouse_logger_is_full(w)) {

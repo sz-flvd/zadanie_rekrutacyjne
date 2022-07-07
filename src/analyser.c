@@ -59,6 +59,9 @@ void* analyser(void* arg) {
             continue;
         }
 
+        message_destroy(*msg);
+        free(msg);
+
         char* lines[n_procs + 1];
         char* save = msg_buf;
         char* token = strtok(save, "\n");
@@ -69,10 +72,6 @@ void* analyser(void* arg) {
             cnt++;
             token = strtok(NULL, "\n");
         }
-
-        free(msg_buf);
-        message_destroy(*msg);
-        free(msg);
 
         /* parse size_t elems from lines 1 to n_proc-1 (ignore line starting with cpu)*/
         for(size_t i = 1; i < cnt; i++) {
@@ -85,6 +84,8 @@ void* analyser(void* arg) {
                 fd_count++;
             }
         }
+
+        free(msg_buf);
 
         Processed_data* pd = processed_data_create(n_procs);
 
