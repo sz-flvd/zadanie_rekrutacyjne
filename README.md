@@ -7,7 +7,7 @@ Featured task-specific threads include:
 * Reader - reads contents of /proc/stat file and passes them as custom Message object to Analyser thread.
 * Analyser - takes Message passed from Reader and analyses it, calculating usage of each CPU for which there is data available in /proc/stat. Analysed data is passed to Printer thread.
 * Printer - takes care of presenting analysed data by printing it in console.
-* Watchdog - [to be implemented] keeps track of each thread's activity, shuts down the program in case where either of the worker threads has not been active in over 2 seconds.
+* Watchdog - keeps track of each thread's activity, shuts down the program in case where either of the worker threads has not been active in over 2 seconds.
 * Logger - takes informations (for debug purposses etc.) from each task and stores them in file.
 
 Other features include:
