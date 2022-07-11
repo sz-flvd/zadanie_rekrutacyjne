@@ -64,6 +64,8 @@ void* logger(void* arg) {
         message_destroy(*msg);
         free(msg);
 
+        warehouse_logger_notify_watchdog(w);
+
         thread_sleep_millis(LOGGER_SLEEP_DUR);
     }
 

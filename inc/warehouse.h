@@ -50,4 +50,14 @@ Processed_data** warehouse_printer_get(Warehouse* w);
 void warehouse_thread_put_to_logger(Warehouse* w, char const* str, Message_type type);
 Message** warehouse_logger_get(Warehouse* w);
 
+void warehouse_reader_notify_watchdog(Warehouse* w);
+void warehouse_analyser_notify_watchdog(Warehouse* w);
+void warehouse_printer_notify_watchdog(Warehouse* w);
+void warehouse_logger_notify_watchdog(Warehouse* w);
+int warehouse_watchdog_check_reader(Warehouse* w);
+int warehouse_watchdog_check_analyser(Warehouse* w);
+int warehouse_watchdog_check_printer(Warehouse* w);
+int warehouse_watchdog_check_logger(Warehouse* w);
+void watchdog_terminate_threads();
+
 #endif

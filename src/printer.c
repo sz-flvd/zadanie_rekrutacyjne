@@ -26,12 +26,16 @@ void* printer(void* arg) {
         warehouse_thread_put_to_logger(w, "[PRINTER] Leaving critical section", info);
         warehouse_printer_unlock(w);
 
+        printf("\n---CPU USAGE----\n");
         for(size_t i = 0; i < processed_data_get_n_elem(*pd); i++) {
             printf("CPU%zu: %.5f[%%]\n", i, processed_data_get_elem_at(*pd, i));
         }
+        printf("----------------\n");
 
         processed_data_destroy(*pd);
         free(pd);
+
+        warehouse_printer_notify_watchdog(w);
 
         warehouse_thread_put_to_logger(w, "[PRINTER] Sleeping for 1 second", info);
         sleep(1);

@@ -87,6 +87,8 @@ void* reader(void* arg) {
         warehouse_thread_put_to_logger(w, "[READER] Leaving critical section", info);
         warehouse_analyser_unlock(w);
 
+        warehouse_reader_notify_watchdog(w);
+
         long const sleep_dur = ((random() % 6) + 5) * 100;
         char info_buf[SLEEP_INFO_SIZE];
         sprintf(info_buf, "[READER] Sleeping for %ld millis", sleep_dur);

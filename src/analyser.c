@@ -116,6 +116,8 @@ void* analyser(void* arg) {
         warehouse_thread_put_to_logger(w, "[ANALYSER] Leaving second critical section", info);
         warehouse_printer_unlock(w);
 
+        warehouse_analyser_notify_watchdog(w);
+
         long const sleep_dur = ((random() % 6) + 5) * 100;
         char info_buf[SLEEP_INFO_SIZE];
         sprintf(info_buf, "[ANALYSER] Sleeping for %ld millis", sleep_dur);

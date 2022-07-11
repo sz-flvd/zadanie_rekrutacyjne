@@ -12,6 +12,7 @@
 #define ANALYSER_QUEUE_N_ELEMS 5
 #define PRINTER_QUEUE_N_ELEMS 5
 #define LOGGER_QUEUE_N_ELEMS 5
+#define WAIT_TIMEOUT_SEC 2
 
 static sig_atomic_t volatile reader_done = 0;
 static sig_atomic_t volatile analyser_done = 0;
@@ -19,15 +20,25 @@ static sig_atomic_t volatile printer_done = 0;
 static sig_atomic_t volatile watchdog_done = 0;
 static sig_atomic_t volatile logger_done = 0;
 
-void terminate(int signum);
+void terminate(int dummy);
 
-void terminate(int const signum) {
+void terminate(int const dummy) {
     reader_done = 1;
     analyser_done = 1;
     printer_done = 1;
     watchdog_done = 1;
     logger_done = 1;
 }
+
+struct timespec get_wait_time();
+
+struct timespec get_wait_time() {
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    ts.tv_sec += WAIT_TIMEOUT_SEC;
+    return ts;
+}
+
 
 struct Warehouse {
     struct sigaction sigcatch;
@@ -38,12 +49,19 @@ struct Warehouse {
     pthread_mutex_t analyser_mutex;
     pthread_mutex_t printer_mutex;
     pthread_mutex_t logger_mutex;
+    pthread_mutex_t reader_working_mutex;
+    pthread_mutex_t analyser_working_mutex;
+    pthread_mutex_t printer_working_mutex;
+    pthread_mutex_t logger_working_mutex;
     sem_t logger_empty_pos_sem;
     sem_t logger_full_pos_sem;
-    struct timespec wait_timeout;
     Queue* analyser_queue;
     Queue* printer_queue;
     Queue* logger_queue;
+    int reader_working;
+    int analyser_working;
+    int printer_working;
+    int logger_working;
 };
 
 Warehouse* warehouse_create() {
@@ -62,10 +80,17 @@ Warehouse* warehouse_create() {
         .analyser_mutex = PTHREAD_MUTEX_INITIALIZER,
         .printer_mutex = PTHREAD_MUTEX_INITIALIZER,
         .logger_mutex = PTHREAD_MUTEX_INITIALIZER,
-        .wait_timeout = {.tv_sec = 2},
+        .reader_working_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .analyser_working_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .printer_working_mutex = PTHREAD_MUTEX_INITIALIZER,
+        .logger_working_mutex = PTHREAD_MUTEX_INITIALIZER,
         .analyser_queue = queue_create(ANALYSER_QUEUE_N_ELEMS, sizeof(Message*)),
         .printer_queue = queue_create(PRINTER_QUEUE_N_ELEMS, sizeof(Processed_data*)),
-        .logger_queue = queue_create(LOGGER_QUEUE_N_ELEMS, sizeof(Message*))
+        .logger_queue = queue_create(LOGGER_QUEUE_N_ELEMS, sizeof(Message*)),
+        .reader_working = 0,
+        .analyser_working = 0,
+        .printer_working = 0,
+        .logger_working = 0
     };
 
     sigaction(SIGTERM, &w->sigcatch, NULL);
@@ -108,6 +133,10 @@ void warehouse_destroy(Warehouse* const w) {
     pthread_mutex_destroy(&w->analyser_mutex);
     pthread_mutex_destroy(&w->printer_mutex);
     pthread_mutex_destroy(&w->logger_mutex);
+    pthread_mutex_destroy(&w->reader_working_mutex);
+    pthread_mutex_destroy(&w->analyser_working_mutex);
+    pthread_mutex_destroy(&w->printer_working_mutex);
+    pthread_mutex_destroy(&w->logger_working_mutex);
     queue_destroy(w->analyser_queue);
     queue_destroy(w->printer_queue);
     queue_destroy(w->logger_queue);
@@ -235,7 +264,8 @@ int warehouse_reader_wait(Warehouse* const w) {
         return -1;
     }
     
-    return pthread_cond_timedwait(&w->reader_put_allowed, &w->analyser_mutex, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return pthread_cond_timedwait(&w->reader_put_allowed, &w->analyser_mutex, &wait_timeout);
 }
 
 void warehouse_reader_notify(Warehouse* const w) {
@@ -251,7 +281,8 @@ int warehouse_analyser_get_wait(Warehouse* const w) {
         return -1;
     }
     
-    return pthread_cond_timedwait(&w->analyser_get_allowed, &w->analyser_mutex, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return pthread_cond_timedwait(&w->analyser_get_allowed, &w->analyser_mutex, &wait_timeout);
 }
 
 void warehouse_analyser_get_notify(Warehouse* const w) {
@@ -267,7 +298,8 @@ int warehouse_analyser_put_wait(Warehouse* const w) {
         return -1;
     }
     
-    return pthread_cond_timedwait(&w->analyser_put_allowed, &w->printer_mutex, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return pthread_cond_timedwait(&w->analyser_put_allowed, &w->printer_mutex, &wait_timeout);
 }
 
 void warehouse_analyser_put_notify(Warehouse* const w) {
@@ -283,7 +315,8 @@ int warehouse_printer_wait(Warehouse* const w) {
         return -1;
     }
     
-    return pthread_cond_timedwait(&w->printer_get_allowed, &w->printer_mutex, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return pthread_cond_timedwait(&w->printer_get_allowed, &w->printer_mutex, &wait_timeout);
 }
 
 void warehouse_printer_notify(Warehouse* const w) {
@@ -299,7 +332,8 @@ int warehouse_logger_empty_pos_sem_wait(Warehouse* w) {
         return -1;
     }
 
-    return sem_timedwait(&w->logger_empty_pos_sem, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return sem_timedwait(&w->logger_empty_pos_sem, &wait_timeout);
 }
 
 void warehouse_logger_empty_pos_sem_post(Warehouse* w) {
@@ -315,7 +349,8 @@ int warehouse_logger_full_pos_sem_wait(Warehouse* w) {
         return -1;
     }
 
-    return sem_timedwait(&w->logger_full_pos_sem, &w->wait_timeout);
+    struct timespec wait_timeout = get_wait_time();
+    return sem_timedwait(&w->logger_full_pos_sem, &wait_timeout);
 }
 
 void warehouse_logger_full_pos_sem_post(Warehouse* w) {
@@ -427,4 +462,112 @@ Message** warehouse_logger_get(Warehouse* const w) {
     }
 
     return msg;
+}
+
+void warehouse_reader_notify_watchdog(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+
+    pthread_mutex_lock(&w->reader_working_mutex);
+    w->reader_working = 1;
+    pthread_mutex_unlock(&w->reader_working_mutex);
+}
+
+void warehouse_analyser_notify_watchdog(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+
+    pthread_mutex_lock(&w->analyser_working_mutex);
+    w->analyser_working = 1;
+    pthread_mutex_unlock(&w->analyser_working_mutex);
+}
+
+void warehouse_printer_notify_watchdog(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+
+    pthread_mutex_lock(&w->printer_working_mutex);
+    w->printer_working = 1;
+    pthread_mutex_unlock(&w->printer_working_mutex);
+}
+
+void warehouse_logger_notify_watchdog(Warehouse* const w) {
+    if(w == NULL) {
+        return;
+    }
+
+    pthread_mutex_lock(&w->logger_working_mutex);
+    w->logger_working = 1;
+    pthread_mutex_unlock(&w->logger_working_mutex);
+}
+
+int warehouse_watchdog_check_reader(Warehouse* const w) {
+    if(w == NULL) {
+        return -1;
+    }
+
+    int ret, curr;
+
+    pthread_mutex_lock(&w->reader_working_mutex);
+    curr = w->reader_working;
+    ret = 1 - curr;             /* return value: 1 if watchdog was not notified, 0 otherwise */
+    w->reader_working = 0;      /* end value should be either set to 0 after notification was received by watchdog or kept at 0 if watchdog was not notified */
+    pthread_mutex_unlock(&w->reader_working_mutex);
+
+    return ret;
+}
+
+int warehouse_watchdog_check_analyser(Warehouse* w) {
+    if(w == NULL) {
+        return -1;
+    }
+
+    int ret, curr;
+
+    pthread_mutex_lock(&w->analyser_working_mutex);
+    curr = w->analyser_working;
+    ret = 1 - curr;
+    w->analyser_working = 0;
+    pthread_mutex_unlock(&w->analyser_working_mutex);
+
+    return ret;
+}
+
+int warehouse_watchdog_check_printer(Warehouse* w) {
+    if(w == NULL) {
+        return -1;
+    }
+
+    int ret, curr;
+
+    pthread_mutex_lock(&w->printer_working_mutex);
+    curr = w->printer_working;
+    ret = 1 - curr;
+    w->printer_working = 0;
+    pthread_mutex_unlock(&w->printer_working_mutex);
+
+    return ret;
+}
+
+int warehouse_watchdog_check_logger(Warehouse* w) {
+    if(w == NULL) {
+        return -1;
+    }
+
+    int ret, curr;
+
+    pthread_mutex_lock(&w->logger_working_mutex);
+    curr = w->logger_working;
+    ret = 1 - curr;
+    w->logger_working = 0;
+    pthread_mutex_unlock(&w->logger_working_mutex);
+
+    return ret;
+}
+
+void watchdog_terminate_threads() {
+    terminate(0);    
 }
