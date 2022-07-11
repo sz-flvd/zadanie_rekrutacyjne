@@ -16,8 +16,8 @@
 #define SLEEP_INFO_SIZE 36
 
 void* analyser(void* arg) {
-    Warehouse* w = *(Warehouse**) arg;
-    srandom(time(NULL));
+    Warehouse* w = *(Warehouse**)arg;
+    srandom((unsigned)time(NULL));
     size_t n_procs = (size_t) get_nprocs();
     Raw_data* prev_rd[n_procs];
     Raw_data* curr_rd[n_procs];

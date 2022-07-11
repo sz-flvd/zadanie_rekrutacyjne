@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 void* printer(void* arg) {
-    Warehouse* w = *(Warehouse**) arg;
+    Warehouse* w = *(Warehouse**)arg;
     
     while(!warehouse_printer_is_done()) {
         warehouse_thread_put_to_logger(w, "[PRINTER] Entering critical section", info);

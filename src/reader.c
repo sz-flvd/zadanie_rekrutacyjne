@@ -13,11 +13,11 @@
 #define SLEEP_INFO_SIZE 34
 
 void* reader(void* arg) {
-    Warehouse* const w = *(Warehouse**) arg;
-    srandom(time(NULL));
+    Warehouse* const w = *(Warehouse**)arg;
+    srandom((unsigned)time(NULL));
     FILE* file;
     char* buf;
-    char c;
+    int c;
     size_t buf_size;
 
     while(!warehouse_reader_is_done()) {

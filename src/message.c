@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-char const* const msg_type_str[] = {"empty", "raw data", "info", "error"};
+static char const* const msg_type_str[] = {"empty", "raw data", "info", "error"};
 
 struct Message {
     struct tm init_time;

@@ -30,7 +30,7 @@ void terminate(int const dummy) {
     logger_done = 1;
 }
 
-struct timespec get_wait_time();
+struct timespec get_wait_time(void);
 
 struct timespec get_wait_time() {
     struct timespec ts;
@@ -38,7 +38,6 @@ struct timespec get_wait_time() {
     ts.tv_sec += WAIT_TIMEOUT_SEC;
     return ts;
 }
-
 
 struct Warehouse {
     struct sigaction sigcatch;
@@ -366,7 +365,7 @@ void warehouse_reader_put(Warehouse* const w, Message const* const msg) {
         return; 
     }
 
-    queue_enqueue(w->analyser_queue, (void*) &msg);
+    queue_enqueue(w->analyser_queue, &msg);
 }
 
 Message** warehouse_analyser_get(Warehouse* const w) {
@@ -392,7 +391,7 @@ void warehouse_analyser_put(Warehouse* const w, Processed_data const* const pd) 
         return;
     }
 
-    queue_enqueue(w->printer_queue, (void*) &pd);
+    queue_enqueue(w->printer_queue, &pd);
 }
 
 Processed_data** warehouse_printer_get(Warehouse* const w) {
@@ -423,9 +422,8 @@ void warehouse_thread_put_to_logger(Warehouse* const w, char const* const str, M
     if(msg == NULL) {
         return;
     }
-
-    warehouse_logger_lock(w);
   
+    warehouse_logger_lock(w);
     if(warehouse_logger_is_full(w)) {
         warehouse_logger_unlock(w);
         if(warehouse_logger_empty_pos_sem_wait(w) != 0) {
@@ -520,7 +518,7 @@ int warehouse_watchdog_check_reader(Warehouse* const w) {
     return ret;
 }
 
-int warehouse_watchdog_check_analyser(Warehouse* w) {
+int warehouse_watchdog_check_analyser(Warehouse* const w) {
     if(w == NULL) {
         return -1;
     }
@@ -536,7 +534,7 @@ int warehouse_watchdog_check_analyser(Warehouse* w) {
     return ret;
 }
 
-int warehouse_watchdog_check_printer(Warehouse* w) {
+int warehouse_watchdog_check_printer(Warehouse* const w) {
     if(w == NULL) {
         return -1;
     }
@@ -552,7 +550,7 @@ int warehouse_watchdog_check_printer(Warehouse* w) {
     return ret;
 }
 
-int warehouse_watchdog_check_logger(Warehouse* w) {
+int warehouse_watchdog_check_logger(Warehouse* const w) {
     if(w == NULL) {
         return -1;
     }

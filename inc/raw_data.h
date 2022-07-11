@@ -10,7 +10,7 @@ typedef enum Raw_data_field { user_fd, nice_fd, system_fd, idle_fd, iowait_fd,
 
 typedef struct Raw_data Raw_data;
 
-Raw_data* raw_data_create();
+Raw_data* raw_data_create(void);
 void raw_data_destroy(Raw_data* rd);
 int raw_data_set(Raw_data* rd, Raw_data_field fd, size_t elem);
 int raw_data_fill(Raw_data* restrict rd, size_t const elems[restrict], size_t n_elems);

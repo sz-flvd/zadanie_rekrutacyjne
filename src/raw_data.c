@@ -80,7 +80,7 @@ double raw_data_calculate_usage(Raw_data const* const prev_rd, Raw_data const* c
     size_t total_d = curr_total - prev_total;
     size_t idle_d = curr_idle - prev_idle;
 
-    double usage = (double)(total_d - idle_d) / total_d;
+    double usage = (double)(total_d - idle_d) / (double)total_d;
 
     return usage;
 }

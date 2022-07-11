@@ -10,11 +10,11 @@ typedef struct Warehouse Warehouse;
 Warehouse* warehouse_create(void);
 void warehouse_destroy(Warehouse* w);
 
-bool warehouse_reader_is_done();
-bool warehouse_analyser_is_done();
-bool warehouse_printer_is_done();
-bool warehouse_watchdog_is_done();
-bool warehouse_logger_is_done();
+bool warehouse_reader_is_done(void);
+bool warehouse_analyser_is_done(void);
+bool warehouse_printer_is_done(void);
+bool warehouse_watchdog_is_done(void);
+bool warehouse_logger_is_done(void);
 
 bool warehouse_analyser_is_full(Warehouse const* w);
 bool warehouse_analyser_is_empty(Warehouse const* w);
@@ -58,6 +58,6 @@ int warehouse_watchdog_check_reader(Warehouse* w);
 int warehouse_watchdog_check_analyser(Warehouse* w);
 int warehouse_watchdog_check_printer(Warehouse* w);
 int warehouse_watchdog_check_logger(Warehouse* w);
-void watchdog_terminate_threads();
+void watchdog_terminate_threads(void);
 
 #endif

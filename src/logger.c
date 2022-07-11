@@ -14,7 +14,7 @@
 #define LOGGER_SLEEP_DUR 10
 
 void* logger(void* arg) {
-    Warehouse* w = *(Warehouse**) arg;
+    Warehouse* w = *(Warehouse**)arg;
     FILE* file = fopen(LOG_FILE_NAME, LOG_FILE_FLAG);
     
 
