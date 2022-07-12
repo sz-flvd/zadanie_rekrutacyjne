@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <time.h>
 
-typedef enum Message_type {empty, raw_data, info, error} Message_type;
+typedef enum Message_type {empty, raw_data, info, error, exit_info} Message_type;
 
 typedef struct Message Message;
 

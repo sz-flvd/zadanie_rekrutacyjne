@@ -24,12 +24,12 @@ void raw_data_destroy(Raw_data* const rd) {
     free(rd);
 }
 
-int raw_data_set(Raw_data* const rd, Raw_data_field const fd, size_t const elem) {
+int raw_data_set(Raw_data* const rd, Raw_data_field const fd, size_t const val) {
     if(rd == NULL) {
         return -1;
     }
 
-    rd->fields[fd] = elem;
+    rd->fields[fd] = val;
 
     return 0;
 }
@@ -53,7 +53,7 @@ int raw_data_fill(Raw_data* const restrict rd, size_t const elems[const restrict
     return 0;
 }
 
-int raw_data_copy(Raw_data* const restrict dest_rd, Raw_data* const restrict src_rd) {
+int raw_data_copy(Raw_data* const restrict dest_rd, Raw_data const* const restrict src_rd) {
     if(dest_rd == NULL) {
         return -1;
     }
@@ -68,6 +68,14 @@ int raw_data_copy(Raw_data* const restrict dest_rd, Raw_data* const restrict src
 }
 
 double raw_data_calculate_usage(Raw_data const* const prev_rd, Raw_data const* const curr_rd) {
+    if(prev_rd == NULL) {
+        return -1;
+    }
+
+    if(curr_rd == NULL) {
+        return -2;
+    }
+    
     size_t prev_idle = prev_rd->fields[idle_fd] + prev_rd->fields[iowait_fd];
     size_t curr_idle = curr_rd->fields[idle_fd] + curr_rd->fields[iowait_fd];
 

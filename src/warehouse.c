@@ -11,7 +11,7 @@
 
 #define ANALYSER_QUEUE_N_ELEMS 5
 #define PRINTER_QUEUE_N_ELEMS 5
-#define LOGGER_QUEUE_N_ELEMS 5
+#define LOGGER_QUEUE_N_ELEMS 20
 #define WAIT_TIMEOUT_SEC 2
 
 static sig_atomic_t volatile reader_done = 0;
@@ -20,9 +20,9 @@ static sig_atomic_t volatile printer_done = 0;
 static sig_atomic_t volatile watchdog_done = 0;
 static sig_atomic_t volatile logger_done = 0;
 
-void terminate(int dummy);
+void terminate(__attribute__((unused)) int dummy);
 
-void terminate(int const dummy) {
+void terminate(__attribute__((unused)) int dummy) {
     reader_done = 1;
     analyser_done = 1;
     printer_done = 1;
@@ -71,7 +71,7 @@ Warehouse* warehouse_create() {
     }
 
     *w = (Warehouse) {
-        .sigcatch = {.sa_handler = terminate},
+        .sigcatch = {.sa_handler = &terminate},
         .reader_put_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_get_allowed = PTHREAD_COND_INITIALIZER,
         .analyser_put_allowed = PTHREAD_COND_INITIALIZER,

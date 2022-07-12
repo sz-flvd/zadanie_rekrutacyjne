@@ -63,12 +63,12 @@ Queue_status queue_enqueue(Queue* const restrict q, void const* const restrict e
         return queue_full;
     }
 
-    uint8_t* const ptr = &q->content[q->head * q->elem_size];
+    uint8_t* const ptr = &q->content[q->tail * q->elem_size];
     memcpy(ptr, elem, q->elem_size);
 
-    q->head++;
-    if(q->head >= q->n_elem) {
-        q->head = 0;
+    q->tail++;
+    if(q->tail >= q->n_elem) {
+        q->tail = 0;
     }
 
     q->curr_n_elem++;
@@ -85,12 +85,12 @@ Queue_status queue_dequeue(Queue* const restrict q, void* const restrict elem) {
         return queue_empty;
     }
 
-    uint8_t const* const ptr = &q->content[q->tail * q->elem_size];
+    uint8_t const* const ptr = &q->content[q->head * q->elem_size];
     memcpy(elem, ptr, q->elem_size);
 
-    q->tail++;
-    if(q->tail >= q->n_elem) {
-        q->tail = 0;
+    q->head++;
+    if(q->head >= q->n_elem) {
+        q->head = 0;
     }
 
     q->curr_n_elem--;

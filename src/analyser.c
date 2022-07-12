@@ -8,16 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <inttypes.h>
-#include <time.h>
+#include <unistd.h>
 #include <sys/sysinfo.h>
-
-#define SLEEP_INFO_SIZE 36
 
 void* analyser(void* arg) {
     Warehouse* w = *(Warehouse**)arg;
-    srandom((unsigned)time(NULL));
     size_t n_procs = (size_t) get_nprocs();
     Raw_data* prev_rd[n_procs];
     Raw_data* curr_rd[n_procs];
@@ -118,12 +114,11 @@ void* analyser(void* arg) {
 
         warehouse_analyser_notify_watchdog(w);
 
-        long const sleep_dur = ((random() % 6) + 5) * 100;
-        char info_buf[SLEEP_INFO_SIZE];
-        sprintf(info_buf, "[ANALYSER] Sleeping for %ld millis", sleep_dur);
-        warehouse_thread_put_to_logger(w, info_buf, info);
-        thread_sleep_millis(sleep_dur);
+        warehouse_thread_put_to_logger(w, "[ANALYSER] Sleeping for 1 second", info);
+        sleep(1);
     }
+
+    warehouse_thread_put_to_logger(w, "[ANALYSER] Exited main loop", exit_info);
 
     for(size_t i = 0; i < n_procs; i++) {
         raw_data_destroy(prev_rd[i]);

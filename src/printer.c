@@ -41,5 +41,7 @@ void* printer(void* arg) {
         sleep(1);
     }
 
+    warehouse_thread_put_to_logger(w, "[PRINTER] Exited main loop", exit_info);
+
     return NULL;
 }

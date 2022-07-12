@@ -1,3 +1,7 @@
+/*  CPU usage tracker: main function
+
+    Author: Szymon Przybysz */
+    
 #include <warehouse.h>
 #include <reader.h>
 #include <analyser.h>

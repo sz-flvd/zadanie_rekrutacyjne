@@ -28,7 +28,7 @@ void processed_data_destroy(Processed_data* const pd) {
     free(pd);
 }
 
-int processed_data_set(Processed_data* const pd, size_t const offset, double const elem) {
+int processed_data_set(Processed_data* const pd, size_t const offset, double const val) {
     if(pd == NULL) {
         return -1;
     }
@@ -37,7 +37,7 @@ int processed_data_set(Processed_data* const pd, size_t const offset, double con
         return -2;
     }
 
-    pd->data[offset] = elem;
+    pd->data[offset] = val;
 
     return 0;
 }
@@ -52,7 +52,11 @@ size_t processed_data_get_n_elem(Processed_data const* const pd) {
 
 double processed_data_get_elem_at(Processed_data const* const pd, size_t const offset) {
     if(pd == NULL) {
-        return 0;
+        return -1;
+    }
+
+    if(offset >= pd->n_elem) {
+        return -2;
     }
 
     return pd->data[offset];

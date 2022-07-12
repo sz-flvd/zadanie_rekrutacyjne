@@ -6,15 +6,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <time.h>
 
 #define FILE_NAME "/proc/stat"
 #define FILE_FLAG "r"
-#define SLEEP_INFO_SIZE 34
 
 void* reader(void* arg) {
     Warehouse* const w = *(Warehouse**)arg;
-    srandom((unsigned)time(NULL));
     FILE* file;
     char* buf;
     int c;
@@ -60,10 +57,8 @@ void* reader(void* arg) {
         fclose(file);
 
         Message* msg = message_create(raw_data, buf);
-        /*
-            At this point working with buf is done and it can be
-            free'd whether or not message_create was successful
-        */
+        /*  At this point working with buf is done and it can be
+            free'd whether or not message_create was successful */
         free(buf);
         if(msg == NULL) {
             warehouse_thread_put_to_logger(w, "[READER] Created NULL message, which may not be sent to warehouse", error);
@@ -89,12 +84,11 @@ void* reader(void* arg) {
 
         warehouse_reader_notify_watchdog(w);
 
-        long const sleep_dur = ((random() % 6) + 5) * 100;
-        char info_buf[SLEEP_INFO_SIZE];
-        sprintf(info_buf, "[READER] Sleeping for %ld millis", sleep_dur);
-        warehouse_thread_put_to_logger(w, info_buf, info);
-        thread_sleep_millis(sleep_dur);
+        warehouse_thread_put_to_logger(w, "[READER] Sleeping for 1 second", info);
+        sleep(1);
     }
+
+    warehouse_thread_put_to_logger(w, "[READER] Exited main loop", exit_info);
 
     return NULL;
 }

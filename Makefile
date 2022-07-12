@@ -16,7 +16,9 @@ LIB_PATHS :=
 LIBS := pthread rt
 
 # Compiler + flag section
-CC ?= gcc
+ifneq ("$(origin CC)","command line")
+	CC = gcc
+endif
 
 C_FLAGS := -Wall -Wextra -mavx -pthread
 DEP_FLAGS := -MMD -MP
@@ -25,8 +27,10 @@ HDR_INC := $(addprefix -I,$(INC_DIRS))
 LIB_INC := $(addprefix -l,$(LIBS))
 LIB_PATH := $(addprefix -L,$(LIB_PATHS))
 
+# -Wno-vla flag added to prevent compiler from warning about intended usage of VLAs in analyser thread 
+# -Wno-disabled-macro-expasion flag added because of warning that could not be fixed, caused by assigning to sa_handler field of sigaction struct in warehouse
 ifeq ($(CC),clang)
-	OTHER_FLAGS += -Weverything
+	OTHER_FLAGS += -Weverything -Wno-vla -Wno-disabled-macro-expansion
 else ifneq (, $(filter $(CC), cc gcc))
 	OTHER_FLAGS += -rdynamic
 endif
@@ -67,5 +71,6 @@ clean:
 	$(PRINT)$(RM) $(TARGET_EXEC)
 	$(PRINT)$(RM) $(OBJ)
 	$(PRINT)$(RM) $(DEP)
+	$(PRINT)$(RM) null.d
 
 -include $(DEPS)

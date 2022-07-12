@@ -5,12 +5,15 @@
 #include <string.h>
 #include <time.h>
 
-static char const* const msg_type_str[] = {"empty", "raw data", "info", "error"};
+#define PADDING_SIZE 4
+
+static char const* const msg_type_str[] = {"empty", "raw data", "info", "error", "exit_info"};
 
 struct Message {
     struct tm init_time;
     size_t payload_size;
     Message_type type;
+    char padding[PADDING_SIZE];
     char payload[];
 };
 
