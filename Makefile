@@ -27,7 +27,7 @@ HDR_INC := $(addprefix -I,$(INC_DIRS))
 LIB_INC := $(addprefix -l,$(LIBS))
 LIB_PATH := $(addprefix -L,$(LIB_PATHS))
 
-# -Wno-vla flag added to prevent compiler from warning about intended usage of VLAs in analyser thread 
+# -Wno-vla flag added to prevent compiler from warning about intended use of VLAs in analyser thread 
 # -Wno-disabled-macro-expasion flag added because of warning that could not be fixed, caused by assigning to sa_handler field of sigaction struct in warehouse
 ifeq ($(CC),clang)
 	OTHER_FLAGS += -Weverything -Wno-vla -Wno-disabled-macro-expansion
