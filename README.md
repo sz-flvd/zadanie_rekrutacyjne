@@ -12,3 +12,11 @@ Featured task-specific threads include:
 
 Other features include:
 * catching SIGTERM to exit safely
+
+## Compilation and running
+This project was built using Makefile. In order to compile with default settings (default compiler is gcc) simply use _make_. To clean project directories from files generated during compilation, use _make clean_. Final compilation output is stored in `main.out` file. To run compiled program, use _./main.out_.
+Several variables are supported by Makefile in this project.
+* CC - to use a different compiler, run _make CC=compiler_
+* V - setting value of variable V to any nonempty string enables verbose mode, e.g. _make V=y_
+* O - setting value of variable enables compiler optimisation, e.g. _make O=3_ will run compiler with flag -O3
+* G - setting value of variable G allows the use of gdb debugger with the compiled program, e.g. _make G=3_ will run compiler with flag -ggdb3
