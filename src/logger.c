@@ -1,3 +1,7 @@
+/*  Implementation of main logger thread function
+
+    Author: Szymon Przybysz */
+
 #include <logger.h>
 #include <message.h>
 #include <warehouse.h>
@@ -28,6 +32,8 @@ void* logger(void* arg) {
         if(warehouse_logger_is_empty(w)) {
             warehouse_logger_unlock(w);
             if(warehouse_logger_full_pos_sem_wait(w) != 0) {
+                 /* Consecutive timeout mechanism to prevent logger from being stuck in infinite loop
+                    in case some of the terminating messages are never received */
                 timeout_cnt++;
                 if(timeout_cnt >= TOTAL_TIMEOUT) {
                     done = true;
@@ -57,9 +63,29 @@ void* logger(void* arg) {
         }
 
         char* msg_buf = malloc(message_get_payload_size(*msg));
+        if(msg_buf == NULL) {
+            message_destroy(*msg);
+            free(msg);
+            continue;
+        }
+
         char* const type_buf = malloc(message_get_type_str_size(*msg));
+        if(type_buf == NULL) {
+            free(msg_buf);
+            message_destroy(*msg);
+            free(msg);
+            continue;
+        }
+        
         char time_str[TIME_STR_SIZE];
         struct tm* msg_init_time = malloc(sizeof(*msg_init_time));
+        if(msg_init_time == NULL) {
+            free(msg_buf);
+            free(type_buf);
+            message_destroy(*msg);
+            free(msg);
+            continue;
+        }
 
         message_get_payload(*msg, msg_buf);
         message_get_init_time(*msg, msg_init_time);

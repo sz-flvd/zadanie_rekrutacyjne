@@ -1,0 +1,572 @@
+#Wed Jul 13 14:09:24 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:24 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:24 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:24 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:24 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:24 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:24 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:24 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:24 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:25 2022 <info> [WATCHDOG] Entering main loop
+#Wed Jul 13 14:09:25 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:25 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:25 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:25 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:25 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:25 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:26 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:26 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:26 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:26 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:26 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:26 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:26 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:26 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:27 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:27 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:27 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:27 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:27 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:27 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:28 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:28 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:28 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:28 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:28 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:28 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:28 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:28 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:29 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:29 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:29 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:29 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:29 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:29 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:30 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:30 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:30 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:30 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:30 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:30 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:30 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:30 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:31 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:31 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:31 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:31 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:31 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:31 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:32 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:32 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:32 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:32 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:32 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:32 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:32 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:32 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:33 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:33 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:33 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:33 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:33 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:33 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:34 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:34 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:34 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:34 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul #Wed Jul 13 14:09:53 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:53 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:53 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:53 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:53 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:53 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:53 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:53 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:53 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:53 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:54 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:54 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:54 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:54 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:54 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:54 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:54 2022 <info> [WATCHDOG] Entering main loop
+#Wed Jul 13 14:09:55 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:55 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:55 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:55 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:09:56 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:09:56 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:09:56 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:09:56 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:09:56 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:56 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:56 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:56 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:57 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:09:57 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:09:57 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:57 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:57 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:57 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:58 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:09:58 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:09:58 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:09:58 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:09:58 2022 <exit_info> [WATCHDOG] Exited after worker thread has not responed in 2 seconds
+#Wed Jul 13 14:09:59 2022 <exit_info> [PRINTER] Exited main loop
+#Wed Jul 13 14:09:59 2022 <exit_info> [ANALYSER] Exited main loop
+#Wed Jul 13 14:09:59 2022 <exit_info> [READER] Exited main loop
+#Wed Jul 13 14:10:56 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:10:56 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:10:56 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:10:56 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:10:56 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:10:56 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:10:56 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:10:56 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:10:56 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:10:56 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:10:57 2022 <info> [WATCHDOG] Entering main loop
+#Wed Jul 13 14:10:57 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:10:57 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:10:57 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:10:57 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:10:57 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:10:57 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:10:58 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:10:58 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:10:58 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:10:58 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:10:59 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:10:59 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:10:59 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:10:59 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:10:59 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:10:59 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:10:59 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:10:59 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:00 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:00 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:00 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:00 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:00 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:00 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:01 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:01 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:01 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:01 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:02 2022 <exit_info> [WATCHDOG] Exited after worker thread has not responed in 2 seconds
+#Wed Jul 13 14:11:02 2022 <exit_info> [READER] Exited main loop
+#Wed Jul 13 14:11:02 2022 <exit_info> [ANALYSER] Exited main loop
+#Wed Jul 13 14:11:02 2022 <exit_info> [PRINTER] Exited main loop
+#Wed Jul 13 14:11:31 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:31 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:31 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:31 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:31 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:31 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:31 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:31 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:31 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:32 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:32 2022 <info> [WATCHDOG] Entering main loop
+#Wed Jul 13 14:11:32 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:32 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:32 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:32 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:32 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:33 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:33 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:33 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:33 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:33 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:33 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:33 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:33 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:33 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:34 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:34 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:34 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:34 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:34 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:34 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:34 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:34 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:34 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:35 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:35 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:35 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:35 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:35 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:35 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:35 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:35 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:35 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:35 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:35 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:35 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:35 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:36 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:36 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:36 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:36 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:36 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:36 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:36 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:37 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:37 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:37 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:37 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:37 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:37 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:37 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:37 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:37 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:38 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:38 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:38 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:38 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:38 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:38 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:38 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:38 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:38 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:39 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:39 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:39 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:39 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:39 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:39 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:39 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:39 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:39 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:40 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:40 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:40 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:40 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:40 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:40 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:40 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:40 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:40 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:41 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:41 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:41 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:41 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:41 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:41 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:41 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:41 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:41 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:42 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:42 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:42 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:42 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:42 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:42 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:42 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:42 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:42 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:43 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:43 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:43 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:43 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:43 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:43 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:43 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:43 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:43 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:44 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:44 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:44 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:44 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:44 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:44 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:44 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:44 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:44 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:45 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:45 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:45 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:45 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:45 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:45 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:45 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:45 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:45 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:45 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:46 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:46 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:46 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:46 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:46 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:46 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:46 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:46 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:46 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:46 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Queue is empty, waiting for data from reader
+#Wed Jul 13 14:11:47 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:47 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:47 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:47 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:47 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:47 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:47 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:47 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:47 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:47 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:48 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:48 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:48 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:48 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:48 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:48 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:48 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:48 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:48 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:49 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:49 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:49 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:49 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:49 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:49 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:49 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:49 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:49 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:50 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:50 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:50 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:50 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:50 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:50 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:50 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:50 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:50 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:51 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:51 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:51 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:51 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:51 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:51 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:51 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:51 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:51 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:52 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:52 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:52 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:52 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:52 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:52 2022 <info> [PRINTER] Queue is empty, waiting for data from analyzer
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:52 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:52 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:52 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:52 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:53 2022 <info> [READER] Entering critical section
+#Wed Jul 13 14:11:53 2022 <info> [READER] Putting message in analyzer queue
+#Wed Jul 13 14:11:53 2022 <info> [READER] Leaving critical section
+#Wed Jul 13 14:11:53 2022 <info> [READER] Sleeping for 1 second
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Entering first critical section
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Getting a message from queue
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Leaving first critical section
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Entering second critical section
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Putting processed data object into queue
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Leaving second critical section
+#Wed Jul 13 14:11:53 2022 <info> [ANALYSER] Sleeping for 1 second
+#Wed Jul 13 14:11:53 2022 <info> [PRINTER] Entering critical section
+#Wed Jul 13 14:11:53 2022 <info> [PRINTER] Getting an object of Processed_data from queue
+#Wed Jul 13 14:11:53 2022 <info> [PRINTER] Leaving critical section
+#Wed Jul 13 14:11:53 2022 <info> [PRINTER] Sleeping for 1 second
+#Wed Jul 13 14:11:53 2022 <exit_info> [WATCHDOG] Exited main loop
+#Wed Jul 13 14:11:54 2022 <exit_info> [ANALYSER] Exited main loop
+#Wed Jul 13 14:11:54 2022 <exit_info> [PRINTER] Exited main loop
+#Wed Jul 13 14:11:54 2022 <exit_info> [READER] Exited main loop

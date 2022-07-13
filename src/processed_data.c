@@ -1,3 +1,8 @@
+/*  Implementation of Processed_data struct and
+    associated functions
+
+    Author: Szymon Przybysz */
+    
 #include <processed_data.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -9,6 +14,10 @@ struct Processed_data {
 };
 
 Processed_data* processed_data_create(size_t const n_elem) {
+    if(n_elem == 0) {
+        return NULL;
+    }
+
     Processed_data* pd = calloc(1, sizeof(*pd) + n_elem * sizeof(*pd->data));
     
     if(pd == NULL) {

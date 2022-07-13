@@ -1,3 +1,8 @@
+/*  Implementation of Warehouse struct
+    and associated functions
+
+    Author: Szymon Przybysz */
+
 #include <warehouse.h>
 #include <queue.h>
 #include <processed_data.h>
@@ -20,6 +25,7 @@ static sig_atomic_t volatile printer_done = 0;
 static sig_atomic_t volatile watchdog_done = 0;
 static sig_atomic_t volatile logger_done = 0;
 
+/*  Terminating function called by signal handler */
 void terminate(__attribute__((unused)) int dummy);
 
 void terminate(__attribute__((unused)) int dummy) {
@@ -30,6 +36,7 @@ void terminate(__attribute__((unused)) int dummy) {
     logger_done = 1;
 }
 
+/*  Returns timespec object allowing sem_timedwait and pthread_cond_timedwait calls to wait for 2 seconds */
 struct timespec get_wait_time(void);
 
 struct timespec get_wait_time() {
@@ -40,7 +47,7 @@ struct timespec get_wait_time() {
 }
 
 struct Warehouse {
-    struct sigaction sigcatch;
+    struct sigaction sigcatch;              /* Signal handler */
     pthread_cond_t reader_put_allowed;
     pthread_cond_t analyser_get_allowed;
     pthread_cond_t analyser_put_allowed;
@@ -52,15 +59,15 @@ struct Warehouse {
     pthread_mutex_t analyser_working_mutex;
     pthread_mutex_t printer_working_mutex;
     pthread_mutex_t logger_working_mutex;
-    sem_t logger_empty_pos_sem;
-    sem_t logger_full_pos_sem;
+    sem_t logger_empty_pos_sem;             /* Indicates with its value how many empty slots there are left in logger queue */
+    sem_t logger_full_pos_sem;              /* Indicates with its value how many occupied slots there are in logger queue */
     Queue* analyser_queue;
     Queue* printer_queue;
     Queue* logger_queue;
-    int reader_working;
-    int analyser_working;
-    int printer_working;
-    int logger_working;
+    int reader_working;                     /* Used by reader to signal watchdog at the end of every loop run */
+    int analyser_working;                   /* Used by analyser to signal watchdog at the end of every loop run */
+    int printer_working;                    /* Used by printer to signal watchdog at the end of every loop run */
+    int logger_working;                     /* Used by logger to signal watchdog at the end of every loop run */
 };
 
 Warehouse* warehouse_create() {
@@ -105,6 +112,7 @@ void warehouse_destroy(Warehouse* const w) {
         return;
     }
 
+    /* All remaining elements in each queue must be dequeued and destroyed */
     while(!warehouse_analyser_is_empty(w)) {
         Message** const msg = warehouse_analyser_get(w);
         message_destroy(*msg);

@@ -1,3 +1,7 @@
+/*  Implementation of thread_sleep_millis function
+    
+    Author: Szymon Przybysz */
+    
 #include <thread_sleep.h>
 #include <stdlib.h>
 #include <time.h>

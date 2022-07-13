@@ -1,3 +1,7 @@
+/*  Implementation of main watchdog thread function
+
+    Author: Szymon Przybysz */
+
 #include <watchdog.h>
 #include <warehouse.h>
 #include <thread_sleep.h>
@@ -5,6 +9,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
+
+#define WD_ENTER "[WATCHDOG] Entering main loop"
+#define WD_EXIT "[WATCHDOG] Exited main loop"
+#define WD_EXIT_TIMEOUT "[WATCHDOG] Exited after worker thread has not responed in 2 seconds"
+#define WD_TERM "Terminating...\n"
 
 #define N_ROUNDS 10
 #define WATCHDOG_SLEEP 2000 / N_ROUNDS
@@ -22,11 +31,15 @@ void* watchdog(void* arg) {
 
     sleep(1);
 
-    warehouse_thread_put_to_logger(w, "[WATCHDOG] Entering main loop", info);
+    warehouse_thread_put_to_logger(w, WD_ENTER, info);
 
     while(!warehouse_watchdog_is_done() && reader_cnt < N_ROUNDS && analyser_cnt < N_ROUNDS && printer_cnt < N_ROUNDS && logger_cnt < N_ROUNDS) {
         thread_sleep_millis(WATCHDOG_SLEEP);
 
+        /*  Counter for each thread is increased by 1 if return value of check function is equal 1
+            or reset to 0 if return value is equal 0
+            To avoid more if else statements, counter value of each thread is increased by 1 and then
+            multiplied by return value of check function of correspondingi thread */
         reader_tmp = warehouse_watchdog_check_reader(w);
         if(reader_tmp != -1) {
             reader_cnt = (reader_cnt + 1) * (size_t)reader_tmp;
@@ -48,15 +61,14 @@ void* watchdog(void* arg) {
         }
     }
 
+    printf(WD_TERM);
+
     if(reader_cnt >= N_ROUNDS || analyser_cnt >= N_ROUNDS || printer_cnt >= N_ROUNDS || logger_cnt >= N_ROUNDS) {
-        warehouse_thread_put_to_logger(w, "[WATCHDOG] Exited after worker thread has not responed in 2 seconds", exit_info);
+        warehouse_thread_put_to_logger(w, WD_EXIT_TIMEOUT, exit_info);
+        watchdog_terminate_threads();
     } else {
-        warehouse_thread_put_to_logger(w, "[WATCHDOG] Exited main loop", exit_info);
+        warehouse_thread_put_to_logger(w, WD_EXIT, exit_info);
     }
-
-    printf("Terminating...\n");
-
-    watchdog_terminate_threads();
 
     return NULL;
 } 

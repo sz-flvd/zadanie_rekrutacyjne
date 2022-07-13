@@ -1,3 +1,8 @@
+/*  Implementation of Raw_data struct
+    and associated functions
+
+    Author: Szymon Przybysz */
+
 #include <raw_data.h>
 #include <stdlib.h>
 #include <string.h>

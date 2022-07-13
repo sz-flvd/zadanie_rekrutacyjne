@@ -1,3 +1,8 @@
+/*  Implementation of Queue struct and
+    associated functions
+
+    Author: Szymon Przybysz */
+
 #include <queue.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -8,9 +13,9 @@ struct Queue {
     size_t n_elem;      /* maximum number of elements held in queue */
     size_t curr_n_elem; /* current number of elements in queue */
     size_t elem_size;   /* size of single element in queues */
-    size_t head;
-    size_t tail;
-    uint8_t content[];  /* FAM */
+    size_t head;        /* Offset of the first element in queue */
+    size_t tail;        /* Offset of the last element in queue */
+    uint8_t content[];  /* FAM containing bytes of queue elements */
  };
 
 Queue* queue_create(size_t const n_elem, size_t const elem_size) {

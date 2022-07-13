@@ -14,7 +14,7 @@
 typedef struct Processed_data Processed_data;
 
 /*  Constructor function for Processed_data struct
-    Returns Processed_data struct pointer on successful creation, NULL otherwise */
+    Returns Processed_data struct pointer on successful creation, NULL otherwise, including when n_elem is 0 */
 Processed_data* processed_data_create(size_t n_elem);
 /*  Destructor function for Processed_data struct
     Returns without memory deallocation when pd is NULL */

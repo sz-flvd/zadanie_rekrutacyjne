@@ -71,6 +71,5 @@ clean:
 	$(PRINT)$(RM) $(TARGET_EXEC)
 	$(PRINT)$(RM) $(OBJ)
 	$(PRINT)$(RM) $(DEP)
-	$(PRINT)$(RM) null.d
 
 -include $(DEPS)

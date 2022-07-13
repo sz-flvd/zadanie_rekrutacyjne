@@ -1,3 +1,8 @@
+/*  Implementation of Message struct
+    and associated functions
+
+    Author: Szymon Przybysz */
+
 #include <message.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,11 +15,11 @@
 static char const* const msg_type_str[] = {"empty", "raw data", "info", "error", "exit_info"};
 
 struct Message {
-    struct tm init_time;
-    size_t payload_size;
-    Message_type type;
-    char padding[PADDING_SIZE];
-    char payload[];
+    struct tm init_time;        /* Message creation time */
+    size_t payload_size;        /* Size of payload (length in bytes, including null terminating character) */
+    Message_type type;          /* Message type */
+    char padding[PADDING_SIZE]; /* Padding bytes */
+    char payload[];             /* Message payload - FAM of chars */
 };
 
 Message* message_create(Message_type const type, char const data[const]) {
